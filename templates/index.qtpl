@@ -1,0 +1,22 @@
+{% stripspace %}
+{% code
+type IndexPage struct {
+    DefaultPage
+    Recommends []Recommend
+}
+type Recommend struct {
+	DiscussID    uint
+	ShortSha1    string
+	DiscussName  string
+	Initiator    string
+	InitiatorUID uint
+}
+%}
+{% func (p *IndexPage) Body() %}
+<ul>
+{% for _, r := range p.Recommends %}
+    <li><a href="/d/{%s r.ShortSha1%}">{%s r.DiscussName %}</a></li>
+{% endfor %}
+</ul>
+{% endfunc %}
+{% endstripspace %}

@@ -13,6 +13,8 @@ var CFG *cfg
 
 func LoadConfig() {
 	viper.SetDefault("db.dsn", "root:123456@tcp(127.0.0.1:3306)/gorum?charset=utf8mb4&parseTime=True&loc=Local")
+	viper.SetDefault("server.port", 8080)
+	viper.SetDefault("log.level", "info")
 	viper.SetConfigName("config") // name of config file (without extension)
 	viper.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
 	viper.AddConfigPath(".")      // optionally look for config in the working directory
@@ -25,4 +27,8 @@ func LoadConfig() {
 
 func (cfg *cfg) String(key string) string {
 	return viper.GetString(key)
+}
+
+func (cfg *cfg) Int(key string) int {
+	return viper.GetInt(key)
 }

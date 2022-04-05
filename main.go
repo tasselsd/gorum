@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/tasselsd/gorum/api"
 	"github.com/tasselsd/gorum/pkg/core"
 )
 
@@ -10,5 +11,5 @@ func main() {
 	// DB
 	core.LoadDatabase()
 	// App engine start
-	core.StartEngine()
+	api.StartEngine()
 }
