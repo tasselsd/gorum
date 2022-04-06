@@ -51,6 +51,8 @@ type ErrorPage struct {
         code {fotn-size: 16px;}
         footer {font-size: 14px;margin: 10px 0 0 0;}
         ul,li {padding: 0;margin: 0;}
+
+        .error-nav {margin: 10px 0 0 0}
     </style>
 </head>
 <body>

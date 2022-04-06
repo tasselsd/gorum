@@ -163,7 +163,7 @@ func (p *SigninPage) Title() string {
 //line templates/signup.qtpl:52
 func (p *ActivationPage) StreamBody(qw422016 *qt422016.Writer) {
 //line templates/signup.qtpl:52
-	qw422016.N().S(`<div class="activation-tips">你的帐号还未激活！<br /><br />注册时填写的邮箱收件箱似乎已经收到一封激活邮件，点击激活链接以激活帐号</div><div class="error-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a></div>`)
+	qw422016.N().S(`<div class="activation-tips">你的帐号已登记注册！但此刻还未激活！<br /><br />注册时填写邮箱的收件箱似乎已经收到了一封激活邮件，请点击链接激活它</div><div class="error-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a></div>`)
 //line templates/signup.qtpl:62
 }
 

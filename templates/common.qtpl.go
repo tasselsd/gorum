@@ -197,77 +197,77 @@ func StreamHTML(qw422016 *qt422016.Writer, page SitePage) {
 //line templates/common.qtpl:43
 	page.StreamTitle(qw422016)
 //line templates/common.qtpl:43
-	qw422016.N().S(`</title><style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}form input {display: block;margin: 5px 0}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}</style></head><body>`)
-//line templates/common.qtpl:57
+	qw422016.N().S(`</title><style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}form input {display: block;margin: 5px 0}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}.error-nav {margin: 10px 0 0 0}</style></head><body>`)
+//line templates/common.qtpl:59
 	page.StreamBody(qw422016)
-//line templates/common.qtpl:57
+//line templates/common.qtpl:59
 	qw422016.N().S(`<footer><a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a></footer></body></html>`)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 }
 
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 func WriteHTML(qq422016 qtio422016.Writer, page SitePage) {
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	StreamHTML(qw422016, page)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 }
 
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 func HTML(page SitePage) string {
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	WriteHTML(qb422016, page)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 	return qs422016
-//line templates/common.qtpl:63
+//line templates/common.qtpl:65
 }
 
-//line templates/common.qtpl:65
+//line templates/common.qtpl:67
 func (p *ErrorPage) StreamBody(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:65
+//line templates/common.qtpl:67
 	qw422016.N().S(`<div class="error-tips"><div class="status-code">`)
-//line templates/common.qtpl:67
+//line templates/common.qtpl:69
 	qw422016.N().D(p.StatusCode)
-//line templates/common.qtpl:67
+//line templates/common.qtpl:69
 	qw422016.N().S(`</div><div class="error-detail">`)
-//line templates/common.qtpl:68
+//line templates/common.qtpl:70
 	qw422016.E().S(p.Detail)
-//line templates/common.qtpl:68
+//line templates/common.qtpl:70
 	qw422016.N().S(`</div></div><div class="error-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a>`)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 }
 
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 func (p *ErrorPage) WriteBody(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	p.StreamBody(qw422016)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 }
 
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 func (p *ErrorPage) Body() string {
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	p.WriteBody(qb422016)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 	return qs422016
-//line templates/common.qtpl:75
+//line templates/common.qtpl:77
 }

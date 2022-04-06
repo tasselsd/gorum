@@ -54,7 +54,7 @@ func signUp(ctx iris.Context) {
 		write_e500_page(ret.Error, ctx)
 		return
 	}
-	statusOk(ctx)
+	ctx.Redirect("/activation", iris.StatusSeeOther)
 }
 
 func signIn(ctx iris.Context) {
