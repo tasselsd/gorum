@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.7.3-MariaDB, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: igopub
+-- Host: 127.0.0.1    Database: gorum
 -- ------------------------------------------------------
 -- Server version	10.7.1-MariaDB-1:10.7.1+maria~focal
 
@@ -108,13 +108,17 @@ CREATE TABLE `t_user` (
   `avatar` varchar(512) DEFAULT NULL,
   `likes` bigint(20) DEFAULT NULL,
   `email` varchar(128) DEFAULT NULL,
+  `passwd` char(40) DEFAULT NULL,
   `phone` varchar(15) DEFAULT NULL,
   `country_code` int(11) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
-  `sha1` char(20) DEFAULT NULL,
+  `sha1` char(40) DEFAULT NULL,
   `sha1_prefix` char(8) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `valid` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_name_UNIQUE` (`u_name`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -126,4 +130,4 @@ CREATE TABLE `t_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-05 18:57:28
+-- Dump completed on 2022-04-06 23:22:02
