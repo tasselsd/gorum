@@ -8,19 +8,30 @@ interface SitePage {
     Body()
 }
 %}
-{% code type DefaultPage struct {
+{% code 
+type DefaultPage struct {
     Session *session.Session
-} %}
+}
+
+type ErrorPage struct {
+    DefaultPage
+    StatusCode int
+    Detail     string
+} 
+%}
+
 {% func (p *DefaultPage) Title() %}
 {% endfunc %}
+
 {% func (p *DefaultPage) Css() %}
-<link rel="stylesheet" type="text/css" href="/tpl/jhin/css/animate.css"/>
 {% endfunc %}
+
 {% func (p *DefaultPage) Js() %}
-<script async src="/tpl/jhin/js/mathjax/es5/tex-chtml.js"></script>
 {% endfunc %}
+
 {% func (p *DefaultPage) Body() %}
 {% endfunc %}
+
 {% func HTML(page SitePage) %}
 <!DOCTYPE html>
 <html lang="zh-hans">
@@ -29,17 +40,18 @@ interface SitePage {
     <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
     {%= page.Css() %}
     {%= page.Js() %}
-    <style>
-    body {
-    }
-    h1 {font-size: 22px;color: #69c;}
-    a {text-decoration: none;color: #69c}
-    p {padding: 20px 0;}
-    code {fotn-size: 16px;}
-    footer {font-size: 14px;margin: 10px 0 0 0;}
-    ul,li {padding: 0;margin: 0;}
-    </style>
     <title>{%= page.Title() %}</title>
+    <style>
+        body {
+        }
+        h1 {font-size: 22px;color: #69c;}
+        a {text-decoration: none;color: #69c}
+        p {padding: 20px 0;}
+        form input {display: block;margin: 5px 0}
+        code {fotn-size: 16px;}
+        footer {font-size: 14px;margin: 10px 0 0 0;}
+        ul,li {padding: 0;margin: 0;}
+    </style>
 </head>
 <body>
 {%= page.Body() %}
@@ -49,4 +61,17 @@ interface SitePage {
 </body>
 </html>
 {% endfunc %}
+
+{% func (p *ErrorPage) Body() %}
+<div class="error-tips">
+    <div class="status-code">{%d p.StatusCode %}</div>
+    <div class="error-detail">{%s p.Detail %}</div>
+</div>
+<div class="error-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a>
+    </ul>
+</a>
+{% endfunc %}
+
 {% endstripspace %}

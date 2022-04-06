@@ -5,6 +5,7 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"github.com/tasselsd/gorum/pkg/core"
+	"github.com/tasselsd/gorum/pkg/session"
 )
 
 var (
@@ -16,6 +17,16 @@ var (
 
 func StartEngine() {
 	app := iris.Default()
+	app.Use(func(ctx iris.Context) {
+		token := ctx.GetCookie("token")
+		var s = session.NaS
+		if len(token) > 0 {
+			ss, _ := session.SessionFromToken(token)
+			s = ss
+		}
+		ctx.Values().Set("session", s)
+		ctx.Next()
+	})
 	app.Logger().SetLevel(core.CFG.String("log.level"))
 	app.Get("/generate_204", func(ctx iris.Context) {
 		ctx.StatusCode(204)
@@ -33,4 +44,11 @@ func StartEngine() {
 		app.Delete(relativePath, route)
 	}
 	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
+}
+
+func statusOk(ctx iris.Context) {
+	ctx.JSON(iris.Map{
+		"Message": "success",
+		"Code":    200,
+	})
 }

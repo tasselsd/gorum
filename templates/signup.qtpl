@@ -1,0 +1,67 @@
+{% stripspace %}
+
+{% code
+type SignupPage struct {
+    DefaultPage
+}
+type SigninPage struct {
+    DefaultPage
+}
+type ActivationPage struct {
+    DefaultPage
+}
+%}
+
+{% func (p *SignupPage) Body() %}
+<div class="sign-area">
+    <form method="post" action="/signup">
+        <input type="email" name="email" />
+        <input type="text" name="name" />
+        <input type="password" name="password" />
+        <input type="submit" value="注册" />
+    </form>
+    <div class="sign-links">
+        <ul>
+            <li><a href="/signin">登录</a></li>
+        </ul>
+    </div>
+</div>
+{% endfunc %}
+{% func (p *SignupPage) Title() %}
+注册
+{% endfunc %}
+
+{% func (p *SigninPage) Body() %}
+<div class="sign-area">
+    <form method="post" action="/signin">
+        <input type="text" name="signin" />
+        <input type="password" name="password" />
+        <input type="submit" value="登录" />
+    </form>
+    <div class="sign-links">
+        <ul>
+            <li><a href="/signup">注册帐号</a></li>
+        </ul>
+    </div>
+</div>
+{% endfunc %}
+{% func (p *SigninPage) Title() %}
+登录
+{% endfunc %}
+
+{% func (p *ActivationPage) Body() %}
+<div class="activation-tips">
+    你的帐号还未激活！<br /><br />注册时填写的邮箱收件箱似乎已经收到一封激活邮件，点击激活链接以激活帐号
+</div>
+<div class="error-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a>
+    </ul>
+</a>
+</div>
+{% endfunc %}
+{% func (p *ActivationPage) Title() %}
+激活帐号
+{% endfunc %}
+
+{% endstripspace %}

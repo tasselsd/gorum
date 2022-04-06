@@ -32,49 +32,84 @@ type Recommend struct {
 
 //line templates/index.qtpl:15
 func (p *IndexPage) StreamBody(qw422016 *qt422016.Writer) {
-//line templates/index.qtpl:15
+//line templates/index.qtpl:16
+	qw422016.E().S(p.Session.JSON())
+//line templates/index.qtpl:16
 	qw422016.N().S(`<ul>`)
-//line templates/index.qtpl:17
+//line templates/index.qtpl:18
 	for _, r := range p.Recommends {
-//line templates/index.qtpl:17
+//line templates/index.qtpl:18
 		qw422016.N().S(`<li><a href="/d/`)
-//line templates/index.qtpl:18
+//line templates/index.qtpl:19
 		qw422016.E().S(r.ShortSha1)
-//line templates/index.qtpl:18
+//line templates/index.qtpl:19
 		qw422016.N().S(`">`)
-//line templates/index.qtpl:18
+//line templates/index.qtpl:19
 		qw422016.E().S(r.DiscussName)
-//line templates/index.qtpl:18
+//line templates/index.qtpl:19
 		qw422016.N().S(`</a></li>`)
-//line templates/index.qtpl:19
+//line templates/index.qtpl:20
 	}
-//line templates/index.qtpl:19
+//line templates/index.qtpl:20
 	qw422016.N().S(`</ul>`)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 }
 
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 func (p *IndexPage) WriteBody(qq422016 qtio422016.Writer) {
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	p.StreamBody(qw422016)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	qt422016.ReleaseWriter(qw422016)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 }
 
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 func (p *IndexPage) Body() string {
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	p.WriteBody(qb422016)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	qs422016 := string(qb422016.B)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
 	return qs422016
-//line templates/index.qtpl:21
+//line templates/index.qtpl:22
+}
+
+//line templates/index.qtpl:23
+func (p *IndexPage) StreamTitle(qw422016 *qt422016.Writer) {
+//line templates/index.qtpl:23
+	qw422016.N().S(`首页`)
+//line templates/index.qtpl:25
+}
+
+//line templates/index.qtpl:25
+func (p *IndexPage) WriteTitle(qq422016 qtio422016.Writer) {
+//line templates/index.qtpl:25
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line templates/index.qtpl:25
+	p.StreamTitle(qw422016)
+//line templates/index.qtpl:25
+	qt422016.ReleaseWriter(qw422016)
+//line templates/index.qtpl:25
+}
+
+//line templates/index.qtpl:25
+func (p *IndexPage) Title() string {
+//line templates/index.qtpl:25
+	qb422016 := qt422016.AcquireByteBuffer()
+//line templates/index.qtpl:25
+	p.WriteTitle(qb422016)
+//line templates/index.qtpl:25
+	qs422016 := string(qb422016.B)
+//line templates/index.qtpl:25
+	qt422016.ReleaseByteBuffer(qb422016)
+//line templates/index.qtpl:25
+	return qs422016
+//line templates/index.qtpl:25
 }

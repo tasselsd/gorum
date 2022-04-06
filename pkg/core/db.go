@@ -19,14 +19,20 @@ func LoadDatabase() {
 }
 
 type User struct {
-	ID         int64  `gorm:"primaryKey"`
-	Name       string `gorm:"column:u_name"`
-	Avatar     string
-	Likes      string
-	Email      string
-	Phone      string
-	ContryCode int
-	CreateTime time.Time
-	Sha1       string
-	ShortSha1  string `gorm:"column:sha1_prefix"`
+	ID          int64  `gorm:"primaryKey"`
+	Name        string `gorm:"column:u_name"`
+	Avatar      string
+	Likes       int64
+	Email       string
+	Passwd      string
+	Phone       string
+	CountryCode int
+	CreateTime  time.Time
+	Sha1        string
+	ShortSha1   string `gorm:"column:sha1_prefix"`
+	Valid       int
+}
+
+func (User) TableName() string {
+	return "t_user"
 }

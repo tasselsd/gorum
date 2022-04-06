@@ -49,182 +49,225 @@ type SitePage interface {
 //line templates/common.qtpl:4
 }
 
-//line templates/common.qtpl:11
+//line templates/common.qtpl:12
 type DefaultPage struct {
 	Session *session.Session
 }
 
-//line templates/common.qtpl:14
+type ErrorPage struct {
+	DefaultPage
+	StatusCode int
+	Detail     string
+}
+
+//line templates/common.qtpl:23
 func (p *DefaultPage) StreamTitle(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 }
 
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 func (p *DefaultPage) WriteTitle(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	p.StreamTitle(qw422016)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 }
 
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 func (p *DefaultPage) Title() string {
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	p.WriteTitle(qb422016)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 	return qs422016
-//line templates/common.qtpl:15
+//line templates/common.qtpl:24
 }
 
-//line templates/common.qtpl:16
+//line templates/common.qtpl:26
 func (p *DefaultPage) StreamCss(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:16
-	qw422016.N().S(`<link rel="stylesheet" type="text/css" href="/tpl/jhin/css/animate.css"/>`)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 }
 
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 func (p *DefaultPage) WriteCss(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	p.StreamCss(qw422016)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 }
 
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 func (p *DefaultPage) Css() string {
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	p.WriteCss(qb422016)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 	return qs422016
-//line templates/common.qtpl:18
+//line templates/common.qtpl:27
 }
 
-//line templates/common.qtpl:19
+//line templates/common.qtpl:29
 func (p *DefaultPage) StreamJs(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:19
-	qw422016.N().S(`<script async src="/tpl/jhin/js/mathjax/es5/tex-chtml.js"></script>`)
-//line templates/common.qtpl:21
-}
-
-//line templates/common.qtpl:21
-func (p *DefaultPage) WriteJs(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:21
-	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:21
-	p.StreamJs(qw422016)
-//line templates/common.qtpl:21
-	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:21
-}
-
-//line templates/common.qtpl:21
-func (p *DefaultPage) Js() string {
-//line templates/common.qtpl:21
-	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:21
-	p.WriteJs(qb422016)
-//line templates/common.qtpl:21
-	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:21
-	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:21
-	return qs422016
-//line templates/common.qtpl:21
-}
-
-//line templates/common.qtpl:22
-func (p *DefaultPage) StreamBody(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:23
-}
-
-//line templates/common.qtpl:23
-func (p *DefaultPage) WriteBody(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:23
-	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:23
-	p.StreamBody(qw422016)
-//line templates/common.qtpl:23
-	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:23
-}
-
-//line templates/common.qtpl:23
-func (p *DefaultPage) Body() string {
-//line templates/common.qtpl:23
-	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:23
-	p.WriteBody(qb422016)
-//line templates/common.qtpl:23
-	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:23
-	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:23
-	return qs422016
-//line templates/common.qtpl:23
-}
-
-//line templates/common.qtpl:24
-func StreamHTML(qw422016 *qt422016.Writer, page SitePage) {
-//line templates/common.qtpl:24
-	qw422016.N().S(`<!DOCTYPE html><html lang="zh-hans"><head><meta name="viewport" content="width=device-width,initial-scale=1" /><meta http-equiv="content-type" content="text/html;charset=utf-8"/>`)
 //line templates/common.qtpl:30
-	page.StreamCss(qw422016)
-//line templates/common.qtpl:31
-	page.StreamJs(qw422016)
-//line templates/common.qtpl:31
-	qw422016.N().S(`<style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}</style><title>`)
-//line templates/common.qtpl:42
-	page.StreamTitle(qw422016)
-//line templates/common.qtpl:42
-	qw422016.N().S(`</title></head><body>`)
-//line templates/common.qtpl:45
-	page.StreamBody(qw422016)
-//line templates/common.qtpl:45
-	qw422016.N().S(`<footer><a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a></footer></body></html>`)
-//line templates/common.qtpl:51
 }
 
-//line templates/common.qtpl:51
-func WriteHTML(qq422016 qtio422016.Writer, page SitePage) {
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
+func (p *DefaultPage) WriteJs(qq422016 qtio422016.Writer) {
+//line templates/common.qtpl:30
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:51
-	StreamHTML(qw422016, page)
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
+	p.StreamJs(qw422016)
+//line templates/common.qtpl:30
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
 }
 
-//line templates/common.qtpl:51
-func HTML(page SitePage) string {
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
+func (p *DefaultPage) Js() string {
+//line templates/common.qtpl:30
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:51
-	WriteHTML(qb422016, page)
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
+	p.WriteJs(qb422016)
+//line templates/common.qtpl:30
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
 	return qs422016
-//line templates/common.qtpl:51
+//line templates/common.qtpl:30
+}
+
+//line templates/common.qtpl:32
+func (p *DefaultPage) StreamBody(qw422016 *qt422016.Writer) {
+//line templates/common.qtpl:33
+}
+
+//line templates/common.qtpl:33
+func (p *DefaultPage) WriteBody(qq422016 qtio422016.Writer) {
+//line templates/common.qtpl:33
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line templates/common.qtpl:33
+	p.StreamBody(qw422016)
+//line templates/common.qtpl:33
+	qt422016.ReleaseWriter(qw422016)
+//line templates/common.qtpl:33
+}
+
+//line templates/common.qtpl:33
+func (p *DefaultPage) Body() string {
+//line templates/common.qtpl:33
+	qb422016 := qt422016.AcquireByteBuffer()
+//line templates/common.qtpl:33
+	p.WriteBody(qb422016)
+//line templates/common.qtpl:33
+	qs422016 := string(qb422016.B)
+//line templates/common.qtpl:33
+	qt422016.ReleaseByteBuffer(qb422016)
+//line templates/common.qtpl:33
+	return qs422016
+//line templates/common.qtpl:33
+}
+
+//line templates/common.qtpl:35
+func StreamHTML(qw422016 *qt422016.Writer, page SitePage) {
+//line templates/common.qtpl:35
+	qw422016.N().S(`<!DOCTYPE html><html lang="zh-hans"><head><meta name="viewport" content="width=device-width,initial-scale=1" /><meta http-equiv="content-type" content="text/html;charset=utf-8"/>`)
+//line templates/common.qtpl:41
+	page.StreamCss(qw422016)
+//line templates/common.qtpl:42
+	page.StreamJs(qw422016)
+//line templates/common.qtpl:42
+	qw422016.N().S(`<title>`)
+//line templates/common.qtpl:43
+	page.StreamTitle(qw422016)
+//line templates/common.qtpl:43
+	qw422016.N().S(`</title><style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}form input {display: block;margin: 5px 0}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}</style></head><body>`)
+//line templates/common.qtpl:57
+	page.StreamBody(qw422016)
+//line templates/common.qtpl:57
+	qw422016.N().S(`<footer><a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a></footer></body></html>`)
+//line templates/common.qtpl:63
+}
+
+//line templates/common.qtpl:63
+func WriteHTML(qq422016 qtio422016.Writer, page SitePage) {
+//line templates/common.qtpl:63
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line templates/common.qtpl:63
+	StreamHTML(qw422016, page)
+//line templates/common.qtpl:63
+	qt422016.ReleaseWriter(qw422016)
+//line templates/common.qtpl:63
+}
+
+//line templates/common.qtpl:63
+func HTML(page SitePage) string {
+//line templates/common.qtpl:63
+	qb422016 := qt422016.AcquireByteBuffer()
+//line templates/common.qtpl:63
+	WriteHTML(qb422016, page)
+//line templates/common.qtpl:63
+	qs422016 := string(qb422016.B)
+//line templates/common.qtpl:63
+	qt422016.ReleaseByteBuffer(qb422016)
+//line templates/common.qtpl:63
+	return qs422016
+//line templates/common.qtpl:63
+}
+
+//line templates/common.qtpl:65
+func (p *ErrorPage) StreamBody(qw422016 *qt422016.Writer) {
+//line templates/common.qtpl:65
+	qw422016.N().S(`<div class="error-tips"><div class="status-code">`)
+//line templates/common.qtpl:67
+	qw422016.N().D(p.StatusCode)
+//line templates/common.qtpl:67
+	qw422016.N().S(`</div><div class="error-detail">`)
+//line templates/common.qtpl:68
+	qw422016.E().S(p.Detail)
+//line templates/common.qtpl:68
+	qw422016.N().S(`</div></div><div class="error-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a>`)
+//line templates/common.qtpl:75
+}
+
+//line templates/common.qtpl:75
+func (p *ErrorPage) WriteBody(qq422016 qtio422016.Writer) {
+//line templates/common.qtpl:75
+	qw422016 := qt422016.AcquireWriter(qq422016)
+//line templates/common.qtpl:75
+	p.StreamBody(qw422016)
+//line templates/common.qtpl:75
+	qt422016.ReleaseWriter(qw422016)
+//line templates/common.qtpl:75
+}
+
+//line templates/common.qtpl:75
+func (p *ErrorPage) Body() string {
+//line templates/common.qtpl:75
+	qb422016 := qt422016.AcquireByteBuffer()
+//line templates/common.qtpl:75
+	p.WriteBody(qb422016)
+//line templates/common.qtpl:75
+	qs422016 := string(qb422016.B)
+//line templates/common.qtpl:75
+	qt422016.ReleaseByteBuffer(qb422016)
+//line templates/common.qtpl:75
+	return qs422016
+//line templates/common.qtpl:75
 }

@@ -13,10 +13,14 @@ type Recommend struct {
 }
 %}
 {% func (p *IndexPage) Body() %}
+{%s p.Session.JSON() %}
 <ul>
 {% for _, r := range p.Recommends %}
     <li><a href="/d/{%s r.ShortSha1%}">{%s r.DiscussName %}</a></li>
 {% endfor %}
 </ul>
+{% endfunc %}
+{% func (p *IndexPage) Title() %}
+首页
 {% endfunc %}
 {% endstripspace %}
