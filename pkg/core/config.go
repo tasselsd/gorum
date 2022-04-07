@@ -61,7 +61,6 @@ func LoadConfig(configPath string) {
 		panic(err)
 	}
 	CFG = &c
-	fmt.Println(*CFG.Notification.Smtp)
 }
 
 func (cfg *cfg) String(key string) string {
