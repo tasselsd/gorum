@@ -115,10 +115,11 @@ CREATE TABLE `t_user` (
   `sha1` char(40) DEFAULT NULL,
   `sha1_prefix` char(8) DEFAULT NULL,
   `valid` int(11) DEFAULT 0,
+  `once_token` char(80) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_name_UNIQUE` (`u_name`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -130,4 +131,4 @@ CREATE TABLE `t_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-06 23:22:02
+-- Dump completed on 2022-04-07 23:36:22
