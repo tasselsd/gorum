@@ -103,7 +103,7 @@ func _writeSessionCoookie(ctx iris.Context, user *core.User) {
 
 func doActivation(ctx iris.Context) {
 	var user core.User
-	ret := core.DB.Take(&user, "activation_token=?", ctx.Params().GetStringDefault("token", "1"))
+	ret := core.DB.Take(&user, "once_token=?", ctx.Params().GetStringDefault("token", "1"))
 	if ret.RowsAffected != 1 {
 		write_e400_page(ret.Error, ctx)
 		return
@@ -122,7 +122,7 @@ func requestResetPassword(ctx iris.Context) {
 	var user core.User
 	token := session.NewTokenString()
 	if ret := core.DB.Model(&user).Where("email=?", email).Update("once_token", token); ret.RowsAffected != 1 {
-		write_e400_page(fmt.Errorf("邮箱尚未注册 [%s]", ret.Error), ctx)
+		write_e400_page(errors.New("邮箱尚未注册"), ctx)
 		return
 	}
 
