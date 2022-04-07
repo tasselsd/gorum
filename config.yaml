@@ -4,3 +4,11 @@ server:
   port: 8081
 log:
   level: debug
+notification:
+  smtp: 
+    host: smtp.exmail.qq.com
+    port: 465
+    username: <username>
+    password: <password>
+site:
+  domain: <your_site_name>

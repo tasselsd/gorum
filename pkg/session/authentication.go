@@ -48,7 +48,7 @@ type Session struct {
 
 func NewSession(user *core.User) *Session {
 	s := Session{User: *user}
-	s.token = uuid.NewString()
+	s.token = NewTokenString()
 	sessionManager.Save(&s, 24*time.Hour)
 	return &s
 }
@@ -68,4 +68,8 @@ func (s *Session) Token() string {
 func (s *Session) JSON() string {
 	b, _ := json.Marshal(s)
 	return string(b)
+}
+
+func NewTokenString() string {
+	return core.NewSha1Object(uuid.NewString()).Sha1()
 }

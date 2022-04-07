@@ -45,10 +45,3 @@ func StartEngine() {
 	}
 	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
 }
-
-func statusOk(ctx iris.Context) {
-	ctx.JSON(iris.Map{
-		"Message": "success",
-		"Code":    200,
-	})
-}

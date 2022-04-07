@@ -13,9 +13,6 @@ func init() {
 	GET["/d/{id:string}/p/{page:int}"] = discuss
 	GET["/u/{id:string}"] = user
 	GET["/c/{id:string}"] = comment
-	GET["/signup"] = signUpPage
-	GET["/signin"] = signInPage
-	GET["/activation"] = activationPage
 }
 
 func index(ctx iris.Context) {
@@ -48,16 +45,4 @@ func user(ctx iris.Context) {
 
 func comment(ctx iris.Context) {
 
-}
-
-func signUpPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.SignupPage{})
-}
-
-func signInPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.SigninPage{})
-}
-
-func activationPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.ActivationPage{})
 }

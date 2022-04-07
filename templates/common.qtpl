@@ -17,7 +17,12 @@ type ErrorPage struct {
     DefaultPage
     StatusCode int
     Detail     string
-} 
+}
+
+type SuccessPage struct {
+    DefaultPage
+    Detail string
+}
 %}
 
 {% func (p *DefaultPage) Title() %}
@@ -74,6 +79,24 @@ type ErrorPage struct {
         <li><a href="javascript:history.go(-1);">返回上一步</a>
     </ul>
 </a>
+{% endfunc %}
+{% func (p *ErrorPage) Title() %}
+出现一个错误
+{% endfunc %}
+
+{% func (p *SuccessPage) Body() %}
+<div class="success-tips">
+    <div class="status-code">200</div>
+    <div class="error-detail">{%s p.Detail %}</div>
+</div>
+<div class="success-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a>
+    </ul>
+</a>
+{% endfunc %}
+{% func (p *SuccessPage) Title() %}
+操作成功
 {% endfunc %}
 
 {% endstripspace %}

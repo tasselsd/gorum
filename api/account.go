@@ -8,11 +8,20 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
+	"github.com/tasselsd/gorum/templates"
 )
 
 func init() {
 	POST["/signup"] = signUp
 	POST["/signin"] = signIn
+	POST["/reset-password-request"] = requestResetPassword
+	POST["/reset-password"] = resetPassword
+	GET["/activation/{token:string}"] = doActivation
+	GET["/signup"] = signUpPage
+	GET["/signin"] = signInPage
+	GET["/reset-password-request"] = requestResetPasswordPage
+	GET["/reset-password/{token:string}"] = resetPasswordPage
+	GET["/activation"] = activationPage
 }
 
 func signUp(ctx iris.Context) {
@@ -45,14 +54,22 @@ func signUp(ctx iris.Context) {
 			return
 		}
 		core.DB.Save(&user)
-		ctx.Redirect("/activation", iris.StatusSeeOther)
+		_redirect2activation(ctx, email, user.OnceToken)
 		return
 	}
-
+	user.OnceToken = session.NewTokenString()
 	ret = core.DB.Create(&user)
 	if ret.RowsAffected != 1 {
 		write_e500_page(ret.Error, ctx)
 		return
+	}
+	_redirect2activation(ctx, email, user.OnceToken)
+}
+
+func _redirect2activation(ctx iris.Context, email, token string) {
+	err := core.SendActivation(email, token)
+	if err != nil {
+		ctx.Application().Logger().Warn(err)
 	}
 	ctx.Redirect("/activation", iris.StatusSeeOther)
 }
@@ -74,8 +91,88 @@ func signIn(ctx iris.Context) {
 		write_e400_page(fmt.Errorf("帐号或密码不正确 [ %s ]", ret.Error.Error()), ctx)
 		return
 	}
-	s := session.NewSession(&user)
+	_writeSessionCoookie(ctx, &user)
+	ctx.Redirect("/", iris.StatusSeeOther)
+}
+
+func _writeSessionCoookie(ctx iris.Context, user *core.User) {
+	s := session.NewSession(user)
 	ctx.SetCookieKV("token", s.Token(), iris.CookieExpires(24*time.Hour))
 	ctx.SetCookieKV("session", s.JSON(), iris.CookieExpires(24*time.Hour))
-	ctx.Redirect("/", iris.StatusSeeOther)
+}
+
+func doActivation(ctx iris.Context) {
+	var user core.User
+	ret := core.DB.Take(&user, "activation_token=?", ctx.Params().GetStringDefault("token", "1"))
+	if ret.RowsAffected != 1 {
+		write_e400_page(ret.Error, ctx)
+		return
+	}
+	ret = core.DB.Model(&user).Update("valid", 1)
+	if ret.RowsAffected != 1 {
+		write_e500_page(errors.New("未激活任何账户 [ 是否是已激活状态？ ]"), ctx)
+		return
+	}
+	_writeSessionCoookie(ctx, &user)
+	templates.WriteHTML(ctx, &templates.ActivatedPage{})
+}
+
+func requestResetPassword(ctx iris.Context) {
+	email := ctx.PostValue("email")
+	var user core.User
+	token := session.NewTokenString()
+	if ret := core.DB.Model(&user).Where("email=?", email).Update("once_token", token); ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("邮箱尚未注册 [%s]", ret.Error), ctx)
+		return
+	}
+
+	if err := core.SendResetPassword(email, token); err != nil {
+		write_e500_page(err, ctx)
+		return
+	}
+	templates.WriteHTML(ctx, &templates.SuccessPage{Detail: "重置申请已提交，请从邮箱打开重置密码的链接，以完成密码重置"})
+}
+
+func resetPassword(ctx iris.Context) {
+	token := ctx.PostValue("token")
+	passwd := ctx.PostValue("password")
+	var user core.User
+	ret := core.DB.Take(&user, "once_token=?", token)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("令牌无效 [%s]", ret.Error), ctx)
+		return
+	}
+	ret = core.DB.Model(&user).Update("passwd", core.NewSha1Object(passwd).Sha1())
+	if ret.RowsAffected != 1 {
+		write_e500_page(ret.Error, ctx)
+		return
+	}
+	templates.WriteHTML(ctx, &templates.SuccessPage{Detail: "密码更新成功！"})
+}
+
+func signUpPage(ctx iris.Context) {
+	templates.WriteHTML(ctx, &templates.SignupPage{})
+}
+
+func signInPage(ctx iris.Context) {
+	templates.WriteHTML(ctx, &templates.SigninPage{})
+}
+
+func requestResetPasswordPage(ctx iris.Context) {
+	templates.WriteHTML(ctx, &templates.RequestResetPasswordPage{})
+}
+
+func resetPasswordPage(ctx iris.Context) {
+	token := ctx.Params().GetStringDefault("token", "1")
+	var user core.User
+	ret := core.DB.Take(&user, "once_token=?", token)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("令牌无效 [%s]", ret.Error), ctx)
+		return
+	}
+	templates.WriteHTML(ctx, &templates.ResetPasswordPage{Token: token, User: &user})
+}
+
+func activationPage(ctx iris.Context) {
+	templates.WriteHTML(ctx, &templates.ActivationPage{})
 }

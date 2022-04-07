@@ -1,3 +1,4 @@
+{% import "github.com/tasselsd/gorum/pkg/core" %}
 {% stripspace %}
 
 {% code
@@ -9,6 +10,17 @@ type SigninPage struct {
 }
 type ActivationPage struct {
     DefaultPage
+}
+type ActivatedPage struct {
+    DefaultPage
+}
+type RequestResetPasswordPage struct {
+    DefaultPage
+}
+type ResetPasswordPage struct {
+    DefaultPage
+    User *core.User
+    Token string
 }
 %}
 
@@ -41,12 +53,51 @@ type ActivationPage struct {
     <div class="sign-links">
         <ul>
             <li><a href="/signup">注册帐号</a></li>
+            <li><a href="/reset-password-request">重置密码</a></li>
         </ul>
     </div>
 </div>
 {% endfunc %}
 {% func (p *SigninPage) Title() %}
 登录
+{% endfunc %}
+
+{% func (p *RequestResetPasswordPage) Body() %}
+<div class="sign-area">
+    <form method="post" action="/reset-password-request">
+        <input type="email" name="email" />
+        <input type="submit" value="提交申请" />
+    </form>
+    <div class="sign-links">
+        <ul>
+            <li><a href="/signup">注册帐号</a></li>
+            <li><a href="/signin">登录</a></li>
+        </ul>
+    </div>
+</div>
+{% endfunc %}
+{% func (p *RequestResetPasswordPage) Title() %}
+申请重置密码
+{% endfunc %}
+
+{% func (p *ResetPasswordPage) Body() %}
+<div class="sign-area">
+    <div class="current-user">{%s p.User.Name %}</div>
+    <form method="post" action="/reset-password">
+        <input type="password" name="password" />
+        <input type="password" name="token" value="{%s p.Token %}" style="display: none" />
+        <input type="submit" value="重置密码" />
+    </form>
+    <div class="sign-links">
+        <ul>
+            <li><a href="/signup">注册帐号</a></li>
+            <li><a href="/signin">登录</a></li>
+        </ul>
+    </div>
+</div>
+{% endfunc %}
+{% func (p *ResetPasswordPage) Title() %}
+重置密码
 {% endfunc %}
 
 {% func (p *ActivationPage) Body() %}
@@ -62,6 +113,18 @@ type ActivationPage struct {
 {% endfunc %}
 {% func (p *ActivationPage) Title() %}
 激活帐号
+{% endfunc %}
+
+{% func (p *ActivatedPage) Body() %}
+<div class="activated-tips">
+    激活成功，正在<a href="/">跳转首页</a>...
+</div>
+<script>
+setTimeout(()=>window.location.href="/", 1000)
+</script>
+{% endfunc %}
+{% func (p *ActivatedPage) Title() %}
+激活成功
 {% endfunc %}
 
 {% endstripspace %}

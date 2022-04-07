@@ -31,6 +31,7 @@ type User struct {
 	Sha1        string
 	ShortSha1   string `gorm:"column:sha1_prefix"`
 	Valid       int
+	OnceToken   string
 }
 
 func (User) TableName() string {
