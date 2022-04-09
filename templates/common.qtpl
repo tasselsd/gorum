@@ -58,6 +58,7 @@ type SuccessPage struct {
         ul,li {padding: 0;margin: 0;}
 
         .error-nav {margin: 10px 0 0 0}
+        .avatar {width: 32px;height: 32px;}
     </style>
 </head>
 <body>

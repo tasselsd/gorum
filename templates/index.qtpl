@@ -14,7 +14,9 @@ type Recommend struct {
 %}
 {% func (p *IndexPage) Body() %}
 {% if p.Session != nil %}
-{%s p.Session.JSON() %}
+<header>
+<a href="/u/{%s p.Session.ShortSha1 %}"><img class="avatar" src="{%s p.Session.Avatar %}" /><span>{%s p.Session.Name %}</span></a>
+</header>
 {% else %}
 <a href="/signin">登录</a>
 {% endif %}

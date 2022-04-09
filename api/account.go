@@ -19,6 +19,7 @@ func init() {
 	GET["/activation/{token:string}"] = doActivation
 	GET["/signup"] = signUpPage
 	GET["/signin"] = signInPage
+	GET["/signout"] = signoutPage
 	GET["/reset-password-request"] = requestResetPasswordPage
 	GET["/reset-password/{token:string}"] = resetPasswordPage
 	GET["/activation"] = activationPage
@@ -93,6 +94,16 @@ func signIn(ctx iris.Context) {
 	}
 	_writeSessionCoookie(ctx, &user)
 	ctx.Redirect("/", iris.StatusSeeOther)
+}
+
+func signoutPage(ctx iris.Context) {
+	if ctx.URLParamExists("y") {
+		ctx.RemoveCookie("token")
+		ctx.RemoveCookie("session")
+		ctx.Redirect("/", iris.StatusTemporaryRedirect)
+		return
+	}
+	templates.WriteHTML(ctx, &templates.SignoutPage{})
 }
 
 func _writeSessionCoookie(ctx iris.Context, user *core.User) {

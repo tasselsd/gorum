@@ -3,6 +3,9 @@ package session
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"io/fs"
+	"io/ioutil"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,13 +28,23 @@ func newInMemorySessionManager() *InMemorySessionManager {
 	return &inMem
 }
 func (sm *InMemorySessionManager) Save(s *Session, d time.Duration) {
-	sm.store.Set(s.token, s)
+	sm.store.Set(s.token, map[string]any{
+		"t": time.Now().UnixMilli(),
+		"s": s,
+	})
 }
 
 func (sm *InMemorySessionManager) LoadSession(token string) *Session {
 	s, ret := sm.store.Get(token)
 	if ret {
-		return s.(*Session)
+		t := s.(map[string]any)["t"].(int64)
+		if t < time.Now().Add(-time.Hour*24).UnixMilli() {
+			sm.store.Remove(token)
+			return nil
+		}
+		sS := s.(map[string]any)
+		sS["t"] = time.Now().UnixMilli()
+		return sS["s"].(*Session)
 	}
 	return nil
 }
@@ -72,4 +85,42 @@ func (s *Session) JSON() string {
 
 func NewTokenString() string {
 	return core.NewSha1Object(uuid.NewString()).Sha1()
+}
+
+func init() {
+	core.SHUTDOWN_HOOKS = append(core.SHUTDOWN_HOOKS, func() {
+		v, err := sessionManager.store.MarshalJSON()
+		if err != nil {
+			panic(err)
+		}
+		err = ioutil.WriteFile(".gorum-sessions", v, fs.ModePerm)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("[INFO] sessions persisted\n")
+	})
+	core.STARTUP_HOOKS = append(core.STARTUP_HOOKS, func() {
+		b, err := ioutil.ReadFile(".gorum-sessions")
+		if err != nil {
+			fmt.Printf("[WARN] sessions load error [ %s ]\n", err.Error())
+			return
+		}
+		var m map[string]interface{}
+		err = json.Unmarshal(b, &m)
+		if err != nil {
+			fmt.Printf("[WARN] sessions load error [ %s ]\n", err.Error())
+			return
+		}
+		for k, v := range m {
+			t := v.(map[string]any)["t"].(float64)
+			sMap := v.(map[string]any)["s"]
+			s, _ := json.Marshal(sMap)
+			var sess Session
+			json.Unmarshal(s, &sess)
+			sessionManager.store.Set(k, map[string]any{
+				"t": int64(t),
+				"s": &sess,
+			})
+		}
+	})
 }

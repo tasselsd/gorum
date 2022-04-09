@@ -22,6 +22,9 @@ type ResetPasswordPage struct {
     User *core.User
     Token string
 }
+type SignoutPage struct {
+    DefaultPage
+}
 %}
 
 {% func (p *SignupPage) Body() %}
@@ -106,9 +109,8 @@ type ResetPasswordPage struct {
 </div>
 <div class="error-nav">
     <ul>
-        <li><a href="javascript:history.go(-1);">返回上一步</a>
+        <li><a href="javascript:history.go(-1);">返回上一步</a></li>
     </ul>
-</a>
 </div>
 {% endfunc %}
 {% func (p *ActivationPage) Title() %}
@@ -126,5 +128,20 @@ setTimeout(()=>window.location.href="/", 1000)
 {% func (p *ActivatedPage) Title() %}
 激活成功
 {% endfunc %}
+
+{% func (p *SignoutPage) Body() %}
+<div class="signout-tips">
+    确定退出当前会话吗？<a href="/signout?y">是的，立即退出！</a>
+</div>
+<div class="error-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a></li>
+    </ul>
+</div>
+{% endfunc %}
+{% func (p *SignoutPage) Title() %}
+退出登录
+{% endfunc %}
+
 
 {% endstripspace %}

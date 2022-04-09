@@ -33,7 +33,7 @@ func (e *Email) Send(receiver, title, content string) error {
 var EMAIL *Email
 
 func init() {
-	HOOKS = append(HOOKS, init_)
+	STARTUP_HOOKS = append(STARTUP_HOOKS, init_)
 }
 func init_() {
 	EMAIL = newEmail()

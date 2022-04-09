@@ -1,7 +1,10 @@
 package api
 
 import (
+	"fmt"
+
 	"github.com/kataras/iris/v12"
+	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
 	"github.com/tasselsd/gorum/templates"
 )
@@ -16,10 +19,6 @@ func init() {
 }
 
 func index(ctx iris.Context) {
-	// s := ctx.Value("session")
-	// if s == nil {
-	// 	s = session.NaS
-	// }
 	indexData := &templates.IndexPage{
 		DefaultPage: templates.DefaultPage{Session: ctx.Value("session").(*session.Session)},
 		Recommends: []templates.Recommend{
@@ -40,7 +39,19 @@ func discuss(ctx iris.Context) {
 }
 
 func user(ctx iris.Context) {
-
+	uid := ctx.Params().GetStringDefault("id", "nil")
+	var user core.User
+	ret := core.DB.Take(&user, "sha1_prefix=? or u_name=?", uid, uid)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("未找到该用户 [%s]", ret.Error), ctx)
+		return
+	}
+	if len(user.Avatar) == 0 {
+		user.Avatar = core.CFG.Site.DefaultAvatar
+	}
+	templates.WriteHTML(ctx, &templates.ProfilePage{
+		DefaultPage: templates.DefaultPage{Session: ctx.Value("session").(*session.Session)},
+		User:        &user})
 }
 
 func comment(ctx iris.Context) {

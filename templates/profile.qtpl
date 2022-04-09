@@ -1,0 +1,29 @@
+{% import "github.com/tasselsd/gorum/pkg/core" %}
+
+{% stripspace %}
+{% code
+type ProfilePage struct {
+    DefaultPage
+    User *core.User
+}
+%}
+{% func (p *ProfilePage) Body() %}
+<style>
+#profile-header {line-height: 64px;padding: 10px}
+.profile-avatar {width: 64px;height: 64px;float: left;border-radius: 50%}
+.profile-username {font-size: 20px;margin: 0 0 0 85px;display: block;}
+
+.signout-btn {float: right;}
+
+</style>
+<header id="profile-header">
+{% if p.Session != nil %}
+<a class="signout-btn" href="/signout">退出登录</a>
+{% endif %}
+<img class="profile-avatar" src="{%s p.User.Avatar %}" /><span class="profile-username">{%s p.User.Name %}</span>
+</header>
+{% endfunc %}
+{% func (p *ProfilePage) Title() %}
+{%s p.User.Name %}的主页
+{% endfunc %}
+{% endstripspace %}

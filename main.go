@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	defer core.GracefulShutdown()
 	// Prepare configs
 	configPath := "config.yaml"
 	if len(os.Args) >= 2 {
@@ -15,12 +16,9 @@ func main() {
 	}
 	core.LoadConfig(configPath)
 
-	// DB
 	core.LoadDatabase()
 
-	// Refresh Application
 	core.RefreshApplication()
 
-	// App engine start
 	api.StartEngine()
 }

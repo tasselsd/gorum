@@ -202,180 +202,180 @@ func StreamHTML(qw422016 *qt422016.Writer, page SitePage) {
 //line templates/common.qtpl:48
 	page.StreamTitle(qw422016)
 //line templates/common.qtpl:48
-	qw422016.N().S(`</title><style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}form input {display: block;margin: 5px 0}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}.error-nav {margin: 10px 0 0 0}</style></head><body>`)
-//line templates/common.qtpl:64
+	qw422016.N().S(`</title><style>body {}h1 {font-size: 22px;color: #69c;}a {text-decoration: none;color: #69c}p {padding: 20px 0;}form input {display: block;margin: 5px 0}code {fotn-size: 16px;}footer {font-size: 14px;margin: 10px 0 0 0;}ul,li {padding: 0;margin: 0;}.error-nav {margin: 10px 0 0 0}.avatar {width: 32px;height: 32px;}</style></head><body>`)
+//line templates/common.qtpl:65
 	page.StreamBody(qw422016)
-//line templates/common.qtpl:64
+//line templates/common.qtpl:65
 	qw422016.N().S(`<footer><a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a></footer></body></html>`)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 }
 
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 func WriteHTML(qq422016 qtio422016.Writer, page SitePage) {
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	StreamHTML(qw422016, page)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 }
 
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 func HTML(page SitePage) string {
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	WriteHTML(qb422016, page)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 	return qs422016
-//line templates/common.qtpl:70
+//line templates/common.qtpl:71
 }
 
-//line templates/common.qtpl:72
+//line templates/common.qtpl:73
 func (p *ErrorPage) StreamBody(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:72
+//line templates/common.qtpl:73
 	qw422016.N().S(`<div class="error-tips"><div class="status-code">`)
-//line templates/common.qtpl:74
+//line templates/common.qtpl:75
 	qw422016.N().D(p.StatusCode)
-//line templates/common.qtpl:74
+//line templates/common.qtpl:75
 	qw422016.N().S(`</div><div class="error-detail">`)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:76
 	qw422016.E().S(p.Detail)
-//line templates/common.qtpl:75
+//line templates/common.qtpl:76
 	qw422016.N().S(`</div></div><div class="error-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a>`)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 }
 
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 func (p *ErrorPage) WriteBody(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	p.StreamBody(qw422016)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 }
 
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 func (p *ErrorPage) Body() string {
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	p.WriteBody(qb422016)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 	return qs422016
-//line templates/common.qtpl:82
+//line templates/common.qtpl:83
 }
 
-//line templates/common.qtpl:83
+//line templates/common.qtpl:84
 func (p *ErrorPage) StreamTitle(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:83
+//line templates/common.qtpl:84
 	qw422016.N().S(`出现一个错误`)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 }
 
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 func (p *ErrorPage) WriteTitle(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	p.StreamTitle(qw422016)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 }
 
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 func (p *ErrorPage) Title() string {
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	p.WriteTitle(qb422016)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 	return qs422016
-//line templates/common.qtpl:85
+//line templates/common.qtpl:86
 }
 
-//line templates/common.qtpl:87
+//line templates/common.qtpl:88
 func (p *SuccessPage) StreamBody(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:87
+//line templates/common.qtpl:88
 	qw422016.N().S(`<div class="success-tips"><div class="status-code">200</div><div class="error-detail">`)
-//line templates/common.qtpl:90
+//line templates/common.qtpl:91
 	qw422016.E().S(p.Detail)
-//line templates/common.qtpl:90
+//line templates/common.qtpl:91
 	qw422016.N().S(`</div></div><div class="success-nav"><ul><li><a href="javascript:history.go(-1);">返回上一步</a></ul></a>`)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 }
 
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 func (p *SuccessPage) WriteBody(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	p.StreamBody(qw422016)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 }
 
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 func (p *SuccessPage) Body() string {
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	p.WriteBody(qb422016)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 	return qs422016
-//line templates/common.qtpl:97
+//line templates/common.qtpl:98
 }
 
-//line templates/common.qtpl:98
+//line templates/common.qtpl:99
 func (p *SuccessPage) StreamTitle(qw422016 *qt422016.Writer) {
-//line templates/common.qtpl:98
+//line templates/common.qtpl:99
 	qw422016.N().S(`操作成功`)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 }
 
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 func (p *SuccessPage) WriteTitle(qq422016 qtio422016.Writer) {
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	p.StreamTitle(qw422016)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	qt422016.ReleaseWriter(qw422016)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 }
 
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 func (p *SuccessPage) Title() string {
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	qb422016 := qt422016.AcquireByteBuffer()
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	p.WriteTitle(qb422016)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	qs422016 := string(qb422016.B)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	qt422016.ReleaseByteBuffer(qb422016)
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 	return qs422016
-//line templates/common.qtpl:100
+//line templates/common.qtpl:101
 }
