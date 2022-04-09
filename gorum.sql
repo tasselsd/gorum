@@ -53,7 +53,7 @@ CREATE TABLE `t_discuss` (
   `likes` bigint(20) DEFAULT NULL COMMENT 'Number of likes',
   `division_rid` bigint(20) DEFAULT NULL,
   `division` varchar(32) DEFAULT NULL COMMENT 'Jurisdiction of region',
-  `sha1` char(20) DEFAULT NULL,
+  `sha1` char(40) DEFAULT NULL,
   `sha1_prefix` char(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -89,7 +89,7 @@ CREATE TABLE `t_region` (
   `r_name` varchar(32) DEFAULT NULL,
   `about` varchar(45) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL,
-  `sha1` char(20) DEFAULT NULL,
+  `sha1` char(40) DEFAULT NULL,
   `sha1_prefix` char(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -119,7 +119,7 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `u_name_UNIQUE` (`u_name`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -131,4 +131,4 @@ CREATE TABLE `t_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-07 23:36:22
+-- Dump completed on 2022-04-09 23:54:36
