@@ -9,6 +9,7 @@ import (
 	"github.com/tasselsd/gorum/assets"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
+	"github.com/tasselsd/gorum/templates"
 )
 
 var (
@@ -19,15 +20,13 @@ var (
 )
 
 func StartEngine() {
-	views := iris.Django(iris.Dir("./templates"), ".html")
 	app := iris.Default()
-	app.RegisterView(views)
 	app.Use(sessionAware)
 	app.WrapRouter(assetsRouter)
 	app.Logger().SetLevel(core.CFG.String("log.level"))
-	app.Get("/generate_204", func(ctx iris.Context) {
-		ctx.StatusCode(204)
-	})
+	app.RegisterView(iris.Django(http.FS(templates.FS), ".html"))
+	app.Get("/generate_204", generate_204)
+
 	for relativePath, route := range GET {
 		app.Get(relativePath, route)
 	}
@@ -41,6 +40,10 @@ func StartEngine() {
 		app.Delete(relativePath, route)
 	}
 	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
+}
+
+func generate_204(ctx iris.Context) {
+	ctx.StatusCode(204)
 }
 
 func sessionAware(ctx iris.Context) {
