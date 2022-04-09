@@ -1,4 +1,0 @@
-{% stripspace %}
-{% func RegionPage(root interface{}) %}
-{% endfunc %}
-{% endstripspace %}

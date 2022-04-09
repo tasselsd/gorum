@@ -1,0 +1,13 @@
+{% extends '../document.html' %}
+
+{% block title %}{{discuss.Name}}{% endblock %}
+
+{% block body%}
+<h1>{{discuss.Name}}</h1>
+<div class="markdown-body">
+{% autoescape off %}
+{{discussHTML}}
+{% endautoescape %}
+</div>
+{% endblock %}
+

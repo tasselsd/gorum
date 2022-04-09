@@ -1,0 +1,12 @@
+{% extends '../document.html' %}
+
+{% block title %}激活成功{% endblock %}
+
+{% block body%}
+<div class="activated-tips">
+    激活成功，正在<a href="/">跳转首页</a>...
+</div>
+<script>
+setTimeout(()=>window.location.href="/", 1000)
+</script>
+{% endblock %}

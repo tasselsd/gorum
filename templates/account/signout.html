@@ -1,0 +1,14 @@
+{% extends '../document.html' %}
+
+{% block title %}退出登录{% endblock %}
+
+{% block body%}
+<div class="signout-tips">
+    确定退出当前会话吗？<a href="/signout?y">是的，立即退出！</a>
+</div>
+<div class="error-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a></li>
+    </ul>
+</div>
+{% endblock %}

@@ -37,3 +37,34 @@ type User struct {
 func (User) TableName() string {
 	return "t_user"
 }
+
+type Region struct {
+	ID         int64  `gorm:"primaryKey"`
+	Name       string `gorm:"column:r_name"`
+	About      string
+	CreateTime time.Time
+	Sha1       string
+	ShortSha1  string `gorm:"column:sha1_prefix"`
+}
+
+func (Region) TableName() string {
+	return "t_region"
+}
+
+type Discuss struct {
+	ID           int64  `gorm:"primaryKey"`
+	Name         string `gorm:"column:d_name"`
+	Content      string
+	InitiatorUid int64
+	Initiator    string
+	Likes        int64
+	DivisionRid  int64
+	Division     string
+	CreateTime   time.Time
+	Sha1         string
+	ShortSha1    string `gorm:"column:sha1_prefix"`
+}
+
+func (Discuss) TableName() string {
+	return "t_discuss"
+}

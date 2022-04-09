@@ -1,4 +1,0 @@
-{% stripspace %}
-{% func UserPage(root interface{}) %}
-{% endfunc %}
-{% endstripspace %}

@@ -1,0 +1,20 @@
+{% extends '../document.html' %}
+
+{% block title %}{{user.Name}}的主页{% endblock %}
+
+{% block body%}
+<style>
+#profile-header {line-height: 64px;padding: 10px}
+.profile-avatar {width: 64px;height: 64px;float: left;border-radius: 50%}
+.profile-username {font-size: 20px;margin: 0 0 0 85px;display: block;}
+
+.signout-btn {float: right;}
+
+</style>
+<header id="profile-header">
+{% if session %}
+<a class="signout-btn" href="/signout">退出登录</a>
+{% endif %}
+<img class="profile-avatar" src="{{user.Avatar}}" /><span class="profile-username">{{user.Name}}</span>
+</header>
+{% endblock %}

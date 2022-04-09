@@ -8,7 +8,6 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
-	"github.com/tasselsd/gorum/templates"
 )
 
 func init() {
@@ -103,7 +102,7 @@ func signoutPage(ctx iris.Context) {
 		ctx.Redirect("/", iris.StatusTemporaryRedirect)
 		return
 	}
-	templates.WriteHTML(ctx, &templates.SignoutPage{})
+	ctx.View("account/signout")
 }
 
 func _writeSessionCoookie(ctx iris.Context, user *core.User) {
@@ -125,7 +124,7 @@ func doActivation(ctx iris.Context) {
 		return
 	}
 	_writeSessionCoookie(ctx, &user)
-	templates.WriteHTML(ctx, &templates.ActivatedPage{})
+	ctx.View("account/activated")
 }
 
 func requestResetPassword(ctx iris.Context) {
@@ -141,7 +140,8 @@ func requestResetPassword(ctx iris.Context) {
 		write_e500_page(err, ctx)
 		return
 	}
-	templates.WriteHTML(ctx, &templates.SuccessPage{Detail: "重置申请已提交，请从邮箱打开重置密码的链接，以完成密码重置"})
+	ctx.ViewData("detail", "重置申请已提交，请从邮箱打开重置密码的链接，以完成密码重置")
+	ctx.View("success")
 }
 
 func resetPassword(ctx iris.Context) {
@@ -158,19 +158,20 @@ func resetPassword(ctx iris.Context) {
 		write_e500_page(ret.Error, ctx)
 		return
 	}
-	templates.WriteHTML(ctx, &templates.SuccessPage{Detail: "密码更新成功！"})
+	ctx.ViewData("detail", "密码更新成功！")
+	ctx.View("success")
 }
 
 func signUpPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.SignupPage{})
+	ctx.View("account/signup")
 }
 
 func signInPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.SigninPage{})
+	ctx.View("account/signin")
 }
 
 func requestResetPasswordPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.RequestResetPasswordPage{})
+	ctx.View("account/reset-password-request")
 }
 
 func resetPasswordPage(ctx iris.Context) {
@@ -181,9 +182,11 @@ func resetPasswordPage(ctx iris.Context) {
 		write_e400_page(fmt.Errorf("令牌无效 [%s]", ret.Error), ctx)
 		return
 	}
-	templates.WriteHTML(ctx, &templates.ResetPasswordPage{Token: token, User: &user})
+	ctx.ViewData("token", token)
+	ctx.ViewData("user", user)
+	ctx.View("account/rest-password")
 }
 
 func activationPage(ctx iris.Context) {
-	templates.WriteHTML(ctx, &templates.ActivationPage{})
+	ctx.View("account/activation")
 }

@@ -1,4 +1,0 @@
-{% stripspace %}
-{% func DiscussPage(root interface{}) %}
-{% endfunc %}
-{% endstripspace %}

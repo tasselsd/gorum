@@ -1,0 +1,20 @@
+{% extends '../document.html' %}
+
+{% block title %}首页{% endblock %}
+
+{% block body%}
+{% if session %}
+<header>
+<a href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
+</header>
+{% else %}
+<a href="/signin">登录</a>
+{% endif %}
+<a href="/r/gorum/discuss-form">发布一个讨论</a>
+<ul class="recommends">
+{% for r in recommends %}
+    <li><a href="/d/{{r.ShortSha1}}">{{r.Name}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+

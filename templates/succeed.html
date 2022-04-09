@@ -1,0 +1,15 @@
+{% extends '../document.html' %}
+
+{% block title %}操作成功{% endblock %}
+
+{% block body%}
+<div class="success-tips">
+    <div class="status-code">200</div>
+    <div class="error-detail">{{detail}}</div>
+</div>
+<div class="success-nav">
+    <ul>
+        <li><a href="javascript:history.go(-1);">返回上一步</a>
+    </ul>
+</a>
+{% endblock %}

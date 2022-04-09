@@ -19,7 +19,9 @@ var (
 )
 
 func StartEngine() {
+	views := iris.Django(iris.Dir("./templates"), ".html")
 	app := iris.Default()
+	app.RegisterView(views)
 	app.Use(sessionAware)
 	app.WrapRouter(assetsRouter)
 	app.Logger().SetLevel(core.CFG.String("log.level"))
