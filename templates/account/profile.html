@@ -11,10 +11,18 @@
 .signout-btn {float: right;}
 
 .profile {padding: 10px;line-height: 26px;} 
-.profile .title {font-size: 18px;margin-top: 10px;color: rgba(15, 76, 129, 1);border-bottom: .5px solid #ccc;}
+.profile .title {font-size: 18px;margin-top: 20px;color: rgba(15, 76, 129, 1);border-bottom: .5px solid #ccc;}
+.profile .title span {opacity: 0.8;}
 .profile ul {list-style: none;padding: 5px 0;}
 
 .profile .non-k {padding: 10px 0;}
+.profile .discusses {line-height: 20px;}
+.profile .discusses li {margin-bottom: 10px;}
+.profile .comments li:hover {background: #f0f0f0;}
+.profile .comments li {margin-bottom: 10px;}
+.profile .comments .comment {line-height: 20px;}
+.profile .comments .discuss {background: #f0f0f0;padding: 5px;font-size: 14px;line-height: 18px;}
+.profile .comments .discuss a {color: #222;}
 </style>
 <header id="profile-header">
 {% if session %}
@@ -28,15 +36,26 @@
         <li>邮箱：{{user.Email}}</li>
         <li>状态：正常</li>
     </ul>
-    <div class="title">知识</div>
+    <div class="title">讨论 <span>Discussions</span></div>
     {% if discusses %}
-    <ul>
+    <ul class="discusses">
         {% for d in discusses %}
         <li><a href="/d/{{d.ShortSha1}}">{{d.Name}}</a></li>
         {% endfor %}
     </ul>
     {% else %}
     <div class="non-k">神秘！目前为止还未发表任何言论</div>
+    {% endif %}
+    {% if comments %}
+    <div class="title">评论 <span>Comments</span></div>
+    <ul class="comments">
+        {% for c in comments %}
+        <li>
+            <div class="comment">{% autoescape off %}{{c.CommentHTML}}{% endautoescape %}</div>
+            <div class="discuss"><a href="/d/{{c.DiscussDid}}/c/{{c.ShortSha1}}">{{c.DiscussName}}</a></div>
+        </li>
+        {% endfor %}
+    </ul>
     {% endif %}
 </div>
 {% endblock %}

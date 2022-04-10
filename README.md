@@ -2,7 +2,7 @@
 
 ### Concepts
 * Region: `r`  
-* Discuss: `d`  
+* Discussion: `d`  
 * User: `u`  
 * Label: `l`
 * Comment: `c`

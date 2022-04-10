@@ -30,6 +30,12 @@ type RegionDiscuss struct {
 	Initiator *core.User
 }
 
+type ProfileComment struct {
+	core.Comment
+	CommentHTML string
+	DiscussName string
+}
+
 type Comment struct {
 	core.Comment
 	Initiator   *core.User
@@ -39,7 +45,7 @@ type Comment struct {
 func index(ctx iris.Context) {
 
 	var discusses []core.Discuss
-	ret := core.DB.Find(&discusses)
+	ret := core.DB.Limit(50).Order("create_time desc").Find(&discusses)
 	if ret.Error != nil {
 		write_e500_page(ret.Error, ctx)
 		return
@@ -100,7 +106,7 @@ func discuss(ctx iris.Context) {
 
 	var d core.Discuss
 
-	ret := core.DB.Take(&d, "sha1_prefix=?", did)
+	ret := core.DB.Take(&d, "sha1_prefix=? or id=?", did, did)
 	if ret.RowsAffected != 1 {
 		write_e400_page(fmt.Errorf("展示讨论时遇到一个错误 [ %s ]", ret.Error), ctx)
 		return
@@ -108,7 +114,7 @@ func discuss(ctx iris.Context) {
 
 	var comments []core.Comment
 
-	ret = core.DB.Find(&comments).Where("discuss_did=? limit ?,? order by create_time desc", d.ID, (page-1)*20, 20)
+	ret = core.DB.Order("create_time desc").Limit(20).Offset(int((page-1)*20)).Find(&comments, "discuss_did=?", d.ID)
 	if ret.Error != nil {
 		write_e500_page(fmt.Errorf("服务器出现了一个错误 [%s]", ret.Error.Error()), ctx)
 		return
@@ -149,15 +155,32 @@ func user(ctx iris.Context) {
 
 	var discusses []core.Discuss
 
-	ret = core.DB.Find(&discusses).Where("initiator_uid=? order by create_time desc", user.ID)
+	ret = core.DB.Order("create_time desc").Find(&discusses, "initiator_uid=?", user.ID)
 	if ret.Error != nil {
-		write_e500_page(fmt.Errorf("服务器发生了一个错误[%s]", ret.Error.Error()), ctx)
+		write_e500_page(fmt.Errorf("发生一个错误 [%s]", ret.Error.Error()), ctx)
 		return
 	}
 
+	var comments []core.Comment
+	ret = core.DB.Find(&comments, "initiator_uid=?", user.ID).Order("create_time desc")
+	if ret.Error != nil {
+		write_e500_page(fmt.Errorf("发生一个错误 [%s]", ret.Error.Error()), ctx)
+		return
+	}
+	var commentsN []ProfileComment
+
+	for _, c := range comments {
+		b := blackfriday.Run([]byte(c.Content), blackfriday.WithExtensions(blackfriday.HardLineBreak))
+		commentsN = append(commentsN, ProfileComment{
+			Comment:     c,
+			CommentHTML: string(bluemonday.UGCPolicy().SanitizeBytes(b)),
+			DiscussName: c.Discuss,
+		})
+	}
 	ctx.ViewData("session", ctx.Value("session").(*session.Session))
 	ctx.ViewData("user", &user)
 	ctx.ViewData("discusses", discusses)
+	ctx.ViewData("comments", commentsN)
 	ctx.View("account/profile")
 }
 

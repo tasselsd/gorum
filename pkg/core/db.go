@@ -103,6 +103,7 @@ type Comment struct {
 	Initiator    string
 	Likes        int64
 	DiscussDid   int64
+	Discuss      string
 	CreateTime   time.Time
 	Sha1         string
 	ShortSha1    string `gorm:"column:sha1_prefix"`
