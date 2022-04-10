@@ -18,6 +18,33 @@ func LoadDatabase() {
 	DB = db
 }
 
+type UserCache struct {
+	users map[int64]*User
+}
+
+func NewUserCache() *UserCache {
+	return &UserCache{
+		users: make(map[int64]*User),
+	}
+}
+
+func (mu *UserCache) Get(uid int64) *User {
+	u := mu.users[uid]
+	if u == nil {
+		u = new(User)
+		ret := DB.Take(&u, "id=?", uid)
+		if ret.RowsAffected != 1 {
+			u.Name = "Not Found"
+			u.Avatar = CFG.Site.DefaultAvatar
+		}
+		if len(u.Avatar) == 0 {
+			u.Avatar = CFG.Site.DefaultAvatar
+		}
+		mu.users[uid] = u
+	}
+	return u
+}
+
 type User struct {
 	ID          int64  `gorm:"primaryKey"`
 	Name        string `gorm:"column:u_name"`

@@ -2,18 +2,26 @@
 
 {% block title %}首页{% endblock %}
 
+{% block header %}
+<style>
+    header {line-height: 32px;padding: 10px;}
+    header .avatar {float: left;margin-right: 5px;}
+    header span {font-size: 16px;}
+    .recommends li {line-height: 22px;}
+    .recommends li .avatar2profile {display: inline-block;width: 22px;height: 22px;padding: 0 10px 0 0 ;}
+</style>
+{% endblock %}
+
 {% block body%}
-{% if session %}
 <header>
-<a href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
+    <a href="/r/gorum/discuss-form">发布一个讨论</a>
 </header>
-{% else %}
-<a href="/signin">登录</a>
-{% endif %}
-<a href="/r/gorum/discuss-form">发布一个讨论</a>
 <ul class="recommends">
 {% for r in recommends %}
-    <li><a href="/d/{{r.ShortSha1}}">{{r.Name}}</a></li>
+    <li>
+        <a class="avatar2profile" href="/u/{{r.Initiator.ShortSha1}}"><img src="{{r.Initiator.Avatar}}" title="{{r.Initiator.Name}}" /></a>
+        <a class="discuss" href="/d/{{r.ShortSha1}}">{{r.Name}}</a>
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

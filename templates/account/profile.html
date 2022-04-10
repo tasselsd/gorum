@@ -10,6 +10,11 @@
 
 .signout-btn {float: right;}
 
+.profile {padding: 10px;line-height: 26px;} 
+.profile .title {font-size: 20px;margin-top: 10px;color: rgba(15, 76, 129, 1);}
+.profile ul {list-style: none;padding: 5px 0;}
+
+.profile .non-k {padding: 10px 0;}
 </style>
 <header id="profile-header">
 {% if session %}
@@ -17,4 +22,21 @@
 {% endif %}
 <img class="profile-avatar" src="{{user.Avatar}}" /><span class="profile-username">{{user.Name}}</span>
 </header>
+<div class="profile">
+    <div class="title">基本信息</div>
+    <ul>
+        <li>邮箱：{{user.Email}}</li>
+        <li>状态：正常</li>
+    </ul>
+    <div class="title">知识</div>
+    {% if discusses %}
+    <ul>
+        {% for d in discusses %}
+        <li><a href="/d/{{d.ShortSha1}}">{{d.Name}}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="non-k">神秘！目前为止还未发表任何言论</div>
+    {% endif %}
+</div>
 {% endblock %}

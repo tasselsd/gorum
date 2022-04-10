@@ -3,22 +3,129 @@
 {% block title %}{{discuss.Name}}{% endblock %}
 {% block header %}
 <style>
-.post-comment {padding: 10px 20px 10px 10px;}
-.post-comment textarea {width: 100%;}
-.non-comment {padding: 30px 10px;font-size: 16px;color: #888;background: #f9f9f9;line-height:28px;text-align: center;}
-.comments .comment-top {line-height: 22px;padding: 0 10px;margin: 5px 0 -5px 0;}
-.comments .comment-top .avatar {float: left;width: 22px;height: 22px;margin: 0 5px 0 0;}
-.comments .comment-top .author {font-size: 16px;}
-.comments .comment-top .time {font-size: 12px;color: #666;float: right;}
-.comments ul li {border-top: .5px solid #ccc;margin: -10px 0 0 0}
+    h1 {
+        text-align: center;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 1.2em;
+        font-weight: bold;
+        display: table;
+        margin: 2em auto 1em;
+        padding: 1em 1em 0 1em;
+        border-bottom: 2px solid rgba(15, 76, 129, 1);
+        color: #3f3f3f;
+        margin-top: 0;
+    }
+
+    h2 {
+        text-align: center;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 1.2em;
+        font-weight: bold;
+        display: table;
+        margin: 2em auto 2em;
+        padding: 0 0.2em;
+        background: rgba(15, 76, 129, 1);
+        color: #fff;
+    }
+
+    strong {
+        text-align: left;
+        line-height: 1.75;
+        color: rgba(15, 76, 129, 1);
+        font-weight: bold;
+    }
+
+    blockquote {
+        text-align: left;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        border-left: none;
+        padding: 1em;
+        border-radius: 8px;
+        color: rgba(0, 0, 0, 0.5);
+        background: #f7f7f7;
+        margin: 2em 8px;
+    }
+
+    p {
+        text-align: left;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 14px;
+        margin: 1.5em 8px;
+        letter-spacing: 0.1em;
+        color: #3f3f3f;
+    }
+
+    code {
+        text-align: left;
+        line-height: 1.75;
+        font-size: 90%;
+        white-space: pre;
+        color: #d14;
+        background: rgba(27, 31, 35, .05);
+        padding: 3px 5px;
+        border-radius: 4px;
+    }
+
+    .post-comment {
+        padding: 10px 20px 10px 10px;
+    }
+
+    .post-comment textarea {
+        width: 100%;
+    }
+
+    .non-comment {
+        padding: 30px 10px;
+        font-size: 16px;
+        color: #888;
+        background: #f9f9f9;
+        line-height: 28px;
+        text-align: center;
+    }
+
+    .comments p {margin: 0 8px;}
+    .comments .comment-top {
+        line-height: 22px;
+        padding: 0 10px;
+        margin: 5px 0 -5px 0;
+    }
+
+    .comments .comment-top .avatar {
+        float: left;
+        width: 22px;
+        height: 22px;
+        margin: 0 5px 0 0;
+    }
+
+    .comments .comment-top .author {
+        font-size: 16px;
+    }
+
+    .comments .comment-top .time {
+        font-size: 12px;
+        color: #555;
+        float: right;
+        margin-top: -5px;
+    }
+
+    .comments ul li {
+        border-top: .5px solid #ccc;
+        margin: -10px 0 0 0
+    }
 </style>
 {% endblock %}
 {% block body%}
 <h1>{{discuss.Name}}</h1>
 <div class="markdown-body">
-{% autoescape off %}
-{{discussHTML}}
-{% endautoescape %}
+    {% autoescape off %}
+    {{discussHTML}}
+    {% endautoescape %}
 </div>
 <div class="comments">
     {% if comments|length == 0 %}
@@ -52,4 +159,3 @@
     </form>
 </div>
 {% endblock %}
-

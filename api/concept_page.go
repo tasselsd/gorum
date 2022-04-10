@@ -19,6 +19,11 @@ func init() {
 	GET["/u/{uid:string}"] = user
 }
 
+type Recommend struct {
+	core.Discuss
+	Initiator *core.User
+}
+
 type Comment struct {
 	core.Comment
 	Initiator   *core.User
@@ -34,8 +39,17 @@ func index(ctx iris.Context) {
 		return
 	}
 
+	uc := core.NewUserCache()
+	var recommends []Recommend
+	for _, d := range discusses {
+		u := uc.Get(d.InitiatorUid)
+		recommends = append(recommends, Recommend{
+			Discuss:   d,
+			Initiator: u,
+		})
+	}
 	ctx.ViewData("session", ctx.Value("session").(*session.Session))
-	ctx.ViewData("recommends", discusses)
+	ctx.ViewData("recommends", recommends)
 	ctx.View("index")
 }
 
@@ -69,21 +83,10 @@ func discuss(ctx iris.Context) {
 	}
 
 	var commentsN []Comment
-	var users = make(map[int64]*core.User)
+
+	uc := core.NewUserCache()
 	for _, c := range comments {
-		u := users[c.InitiatorUid]
-		if u == nil {
-			u = new(core.User)
-			ret = core.DB.Take(&u, "id=?", c.InitiatorUid)
-			if ret.RowsAffected != 1 {
-				u.Name = "Not Found"
-				u.Avatar = core.CFG.Site.DefaultAvatar
-			}
-			if len(u.Avatar) == 0 {
-				u.Avatar = core.CFG.Site.DefaultAvatar
-			}
-			users[c.InitiatorUid] = u
-		}
+		u := uc.Get(c.InitiatorUid)
 		b := blackfriday.Run([]byte(c.Content))
 		commentsN = append(commentsN, Comment{
 			Comment:     c,
@@ -110,8 +113,17 @@ func user(ctx iris.Context) {
 		user.Avatar = core.CFG.Site.DefaultAvatar
 	}
 
+	var discusses []core.Discuss
+
+	ret = core.DB.Find(&discusses).Where("initiator_uid=? order by create_time desc", user.ID)
+	if ret.Error != nil {
+		write_e500_page(fmt.Errorf("服务器发生了一个错误[%s]", ret.Error.Error()), ctx)
+		return
+	}
+
 	ctx.ViewData("session", ctx.Value("session").(*session.Session))
 	ctx.ViewData("user", &user)
+	ctx.ViewData("discusses", discusses)
 	ctx.View("account/profile")
 }
 

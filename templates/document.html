@@ -6,27 +6,36 @@
     <title>{% block title %}{% endblock %}</title>
     <style>
         body {margin: 0;padding: 0;}
-        h1 {font-size: 22px;color: #69c;}
         a {text-decoration: none;color: #69c}
         p {padding: 10px 0;margin: 0;}
-        nav {padding: 10px;}
+        nav {padding: 5px 10px;background: rgba(15, 76, 129, 1);font-size: 13px;line-height: 22px;}
+        nav a {color: #ffff;font-weight: bold;}
         img {max-width: 100%;}
-        form {padding-right: 20px;}
+        form {padding-right: 5px;}
         form input {display: block;margin: 5px 0;padding: 5px;width: 100%;}
         form input[type="submit"] {padding: 5px 10px;width: initial;float: right;margin-right: -10px;}
         form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
         footer {font-size: 14px;margin: 10px 0 0 0;padding: 20px;text-align: center;}
-        ul,li {padding: 0;margin: 0;}
+        ul,li {padding: 0;margin: 0;list-style: none;;}
         blockquote {margin: 0;}
 
-        .sign-area {padding: 10px;}
-        .sign-links {padding: 10px;}
-        .recommends {margin: 20px 10px;padding: 10px;}
+        .nav-profile {float: right;line-height: 22px;}
+        .nav-profile .avatar {width: 22px;height: 22px;float: left;}
+        .sign-area {padding: 10px 20px 10px 10px;}
+        .sign-tips {font-size: 22px;padding: 10px 0 20px 0;}
+        .sign-links {padding: 10px 5px;}
+        .recommends {margin: 20px 0;padding: 10px;}
         .error-tips {padding: 10px;}
         .error-nav {margin: 10px 0 0 0;padding: 10px;}
         .avatar {width: 32px;height: 32px;}
         .markdown-body {margin: 0;padding: 10px;}
+        @media screen and (min-width: 720px) {
+            body {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+        }
     </style>
     {% block header %}
     {% endblock %}
@@ -34,6 +43,13 @@
 <body>
 <nav>
     <a href="/">首页</a>
+    <div class="nav-profile">
+        {% if session %}
+        <a href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
+        {% else %}
+        <a href="/signin">登录</a>
+        {% endif %}
+    </div>
 </nav>
 {% block body %}{% endblock %}
 <footer>

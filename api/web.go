@@ -97,6 +97,7 @@ func loadAuthentication(ctx iris.Context) {
 		s.Avatar = core.CFG.Site.DefaultAvatar
 	}
 	ctx.Values().Set("session", s)
+	ctx.ViewData("session", s)
 	ctx.Next()
 }
 
