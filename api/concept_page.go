@@ -25,6 +25,11 @@ type Recommend struct {
 	Initiator *core.User
 }
 
+type RegionDiscuss struct {
+	core.Discuss
+	Initiator *core.User
+}
+
 type Comment struct {
 	core.Comment
 	Initiator   *core.User
@@ -55,7 +60,33 @@ func index(ctx iris.Context) {
 }
 
 func region(ctx iris.Context) {
+	rid := ctx.Params().GetStringDefault("rid", "1")
+	var region core.Region
+	ret := core.DB.Take(&region, "sha1_prefix=? or r_name=?", rid, rid)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("不存在的辖区 [%s]", ret.Error), ctx)
+		return
+	}
 
+	var discusses []core.Discuss
+	ret = core.DB.Find(&discusses, "division_rid=?", region.ID)
+	if ret.Error != nil {
+		write_e500_page(fmt.Errorf("发现一个错误 [%s]", ret.Error.Error()), ctx)
+		return
+	}
+
+	uc := core.NewUserCache()
+	var ds []RegionDiscuss
+	for _, d := range discusses {
+		ds = append(ds, RegionDiscuss{
+			Discuss:   d,
+			Initiator: uc.Get(d.InitiatorUid),
+		})
+	}
+
+	ctx.ViewData("discusses", ds)
+	ctx.ViewData("region", region)
+	ctx.View("discuss/region")
 }
 
 func discuss(ctx iris.Context) {

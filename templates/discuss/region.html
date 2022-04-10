@@ -1,20 +1,44 @@
 {% extends '../document.html' %}
 
-{% block title %}选择一个辖区{% endblock %}
+{% block title %}{{region.Name}}{% endblock %}
 
 {% block header %}
 <style>
     .region {padding: 10px;}
+    .region .rname {font-size: 22px;margin: 0 0 10px 0;}
+    .region .about {color: #777;font-size: 16px;line-height: 22px;}
+    .operation {height: 22px;}
+    .operation a {float: right;margin-right: 10px;}
+    .discusses {padding: 20px 10px 10px 10px;}
+    .discusses li {border-top: .5px solid #ccc;padding: 5px 0;}
+    .discusses li .avatar2profile {float: left;width: 22px;height: 22px;padding: 0 10px 0 0 ;}
+    .discusses .non-discuss {text-align: center;padding: 20px 0;color: #777;}
 </style>
 {% endblock %}
 
 {% block body%}
 <div class="region">
+    <div class="rname">{{region.Name}}</div>
+    <div class="abount">{{region.About}}</div>
+</div>
+{% if session %}
+<div class="operation">
+    <a href="/d/{{region.ShortSha1}}/discuss-form">发起讨论</a>
+</div>
+{% endif %}
+<div class="discusses">
+    {% if discusses %}
     <ul>
-        {% for r in regions %}
-        <li><a href="/r/{{r.ShortSha1}}/discuss-form">{{r.Name}}</a></li>
+        {% for d in discusses %}
+        <li>
+            <a class="avatar2profile" href="/u/{{d.Initiator.ShortSha1}}"><img src="{{d.Initiator.Avatar}}" title="{{d.Initiator.Name}}" /></a>
+            <a href="/d/{{d.ShortSha1}}">{{d.Name}}</a>
+        </li>
         {% endfor %}
     </ul>
+    {% else %}
+    <div class="non-discuss">这个领域还未被大家开垦~ 你来决定！</div>
+    {% endif %}
 </div>
 {% endblock %}
 

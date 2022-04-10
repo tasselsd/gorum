@@ -130,8 +130,8 @@
 <div class="comments">
     {% if comments|length == 0 %}
     <div class="non-comment">
-        有深度！目前为止还没有人发现我的价值<br />
-        点击下面「 发表评论 」做价值掘金第一人
+        有深度！目前为止还没有人发现我的内涵<br />
+        {% if session %}点击下面{% else %}<a href="/signin?l=/d/{{discuss.ShortSha1}}">登录</a>{% endif %}「 发表评论 」做价值掘金第一人
     </div>
     {% else %}
     <ul>
@@ -152,6 +152,7 @@
     </ul>
     {% endif %}
 </div>
+{% if session %}
 <div class="post-comment">
     <form method="post" action="/d/{{discuss.ShortSha1}}/comment">
         <textarea name="comment" placeholder="你的精彩论点" required></textarea>
@@ -159,4 +160,5 @@
     </form>
     <div style="clear:both"></div>
 </div>
+{% endif %}
 {% endblock %}

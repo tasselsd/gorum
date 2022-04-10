@@ -26,7 +26,7 @@ func regionSelectorPage(ctx iris.Context) {
 		return
 	}
 	ctx.ViewData("regions", regions)
-	ctx.View("discuss/region")
+	ctx.View("discuss/region-selector")
 }
 
 func postDiscussPage(ctx iris.Context) {
