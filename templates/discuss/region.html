@@ -1,0 +1,20 @@
+{% extends '../document.html' %}
+
+{% block title %}选择一个辖区{% endblock %}
+
+{% block header %}
+<style>
+    .region {padding: 10px;}
+</style>
+{% endblock %}
+
+{% block body%}
+<div class="region">
+    <ul>
+        {% for r in regions %}
+        <li><a href="/r/{{r.ShortSha1}}/discuss-form">{{r.Name}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

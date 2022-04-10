@@ -54,7 +54,7 @@ func signUp(ctx iris.Context) {
 			return
 		}
 		core.DB.Save(&user)
-		_redirect2activation(ctx, email, user.OnceToken)
+		_redirect2activation(ctx, email, user.OnceToken, true)
 		return
 	}
 	user.OnceToken = session.NewTokenString()
@@ -63,14 +63,17 @@ func signUp(ctx iris.Context) {
 		write_e500_page(ret.Error, ctx)
 		return
 	}
-	_redirect2activation(ctx, email, user.OnceToken)
+	_redirect2activation(ctx, email, user.OnceToken, true)
 }
 
-func _redirect2activation(ctx iris.Context, email, token string) {
-	err := core.SendActivation(email, token)
-	if err != nil {
-		ctx.Application().Logger().Warn(err)
+func _redirect2activation(ctx iris.Context, email, token string, send bool) {
+	if send {
+		err := core.SendActivation(email, token)
+		if err != nil {
+			ctx.Application().Logger().Warn(err)
+		}
 	}
+	ctx.SetCookieKV("email", email, iris.CookieExpires(24*time.Hour))
 	ctx.Redirect("/activation", iris.StatusSeeOther)
 }
 
@@ -89,6 +92,10 @@ func signIn(ctx iris.Context) {
 	ret := core.DB.Take(&user, "(u_name=? or email=?) and passwd=?", signin, signin, core.NewSha1Object(passwd).Sha1())
 	if ret.Error != nil {
 		write_e400_page(fmt.Errorf("帐号或密码不正确 [ %s ]", ret.Error.Error()), ctx)
+		return
+	}
+	if user.Valid != 1 {
+		_redirect2activation(ctx, user.Email, user.OnceToken, false)
 		return
 	}
 	_writeSessionCoookie(ctx, &user)
@@ -188,5 +195,18 @@ func resetPasswordPage(ctx iris.Context) {
 }
 
 func activationPage(ctx iris.Context) {
+	email := ctx.GetCookie("email")
+	if len(email) > 0 {
+		var u core.User
+		ret := core.DB.Take(&u, "email=?", email)
+		if ret.RowsAffected != 1 {
+			write_e400_page(errors.New("无效请求"), ctx)
+			return
+		}
+		if u.Valid == 1 {
+			ctx.Redirect("/signin", iris.StatusSeeOther)
+			return
+		}
+	}
 	ctx.View("account/activation")
 }

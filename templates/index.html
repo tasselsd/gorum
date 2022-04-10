@@ -8,13 +8,13 @@
     header .avatar {float: left;margin-right: 5px;}
     header span {font-size: 16px;}
     .recommends li {line-height: 22px;}
-    .recommends li .avatar2profile {display: inline-block;width: 22px;height: 22px;padding: 0 10px 0 0 ;}
+    .recommends li .avatar2profile {float: left;width: 22px;height: 22px;padding: 0 10px 0 0 ;}
 </style>
 {% endblock %}
 
 {% block body%}
 <header>
-    <a href="/r/gorum/discuss-form">发布一个讨论</a>
+    <a href="/region-selector">发布一个讨论</a>
 </header>
 <ul class="recommends">
 {% for r in recommends %}

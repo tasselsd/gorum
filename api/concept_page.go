@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/kataras/iris/v12"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
@@ -87,16 +88,16 @@ func discuss(ctx iris.Context) {
 	uc := core.NewUserCache()
 	for _, c := range comments {
 		u := uc.Get(c.InitiatorUid)
-		b := blackfriday.Run([]byte(c.Content))
+		b := blackfriday.Run([]byte(c.Content), blackfriday.WithExtensions(blackfriday.HardLineBreak))
 		commentsN = append(commentsN, Comment{
 			Comment:     c,
 			Initiator:   u,
-			CommentHTML: string(b),
+			CommentHTML: string(bluemonday.UGCPolicy().SanitizeBytes(b)),
 		})
 	}
-	b := blackfriday.Run([]byte(d.Content))
+	b := blackfriday.Run([]byte(d.Content), blackfriday.WithExtensions(blackfriday.HardLineBreak))
 	ctx.ViewData("discuss", &d)
-	ctx.ViewData("discussHTML", string(b))
+	ctx.ViewData("discussHTML", string(bluemonday.UGCPolicy().SanitizeBytes(b)))
 	ctx.ViewData("comments", commentsN)
 	ctx.View("discuss/discuss")
 }

@@ -12,8 +12,21 @@ import (
 
 func init() {
 	G["/r/{rid:string}/discuss-form"] = postDiscussPage
+	G["/region-selector"] = regionSelectorPage
 	POST["/r/{rid:string}/discuss"] = postDiscuss
 	PO["/d/{did:string}/comment"] = postComment
+}
+
+func regionSelectorPage(ctx iris.Context) {
+	var regions []core.Region
+
+	ret := core.DB.Find(&regions)
+	if ret.Error != nil {
+		write_e500_page(fmt.Errorf("遇到一个错误 [%s]", ret.Error.Error()), ctx)
+		return
+	}
+	ctx.ViewData("regions", regions)
+	ctx.View("discuss/region")
 }
 
 func postDiscussPage(ctx iris.Context) {
