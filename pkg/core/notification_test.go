@@ -7,10 +7,10 @@ import (
 	"github.com/tasselsd/gorum/pkg/core"
 )
 
-func TestSendEmail(t *testing.T) {
-	core.LoadConfig("../../myconfig.yaml")
+func TestSendActivation(t *testing.T) {
+	core.LoadConfig([]string{"", "../../myconfig.yaml"})
 	core.RefreshApplication()
-	err := core.SendActivation("319348135@qq.com", uuid.NewString())
+	err := core.SendActivation("tasselsd@outlook.com", uuid.NewString())
 	if err != nil {
 		panic(err)
 	}

@@ -9,16 +9,8 @@ import (
 
 func main() {
 	defer core.GracefulShutdown()
-	// Prepare configs
-	configPath := "config.yaml"
-	if len(os.Args) >= 2 {
-		configPath = os.Args[1]
-	}
-	core.LoadConfig(configPath)
-
+	core.LoadConfig(os.Args)
 	core.LoadDatabase()
-
 	core.RefreshApplication()
-
 	api.StartEngine()
 }
