@@ -104,6 +104,7 @@ func signIn(ctx iris.Context) {
 
 func signoutPage(ctx iris.Context) {
 	if ctx.URLParamExists("y") {
+		session.RemoveSession(ctx.GetCookie("token"))
 		ctx.RemoveCookie("token")
 		ctx.RemoveCookie("session")
 		ctx.Redirect("/", iris.StatusTemporaryRedirect)

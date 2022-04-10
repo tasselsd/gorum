@@ -16,6 +16,7 @@ import (
 type SessionManager interface {
 	Save(*Session, time.Duration)
 	LoadSession(token string) *Session
+	Remove(token string)
 }
 
 type InMemorySessionManager struct {
@@ -49,6 +50,10 @@ func (sm *InMemorySessionManager) LoadSession(token string) *Session {
 	return nil
 }
 
+func (sm *InMemorySessionManager) Remove(token string) {
+	sm.store.Remove(token)
+}
+
 var (
 	sessionManager = newInMemorySessionManager()
 	NaS            *Session
@@ -72,6 +77,10 @@ func SessionFromToken(token string) (*Session, error) {
 		return s, nil
 	}
 	return nil, errors.New("Unauthorized")
+}
+
+func RemoveSession(token string) {
+	sessionManager.Remove(token)
 }
 
 func (s *Session) Token() string {
@@ -113,6 +122,9 @@ func init() {
 		}
 		for k, v := range m {
 			t := v.(map[string]any)["t"].(float64)
+			if int64(t) < time.Now().Add(-time.Hour*24).UnixMilli() {
+				continue
+			}
 			sMap := v.(map[string]any)["s"]
 			s, _ := json.Marshal(sMap)
 			var sess Session
