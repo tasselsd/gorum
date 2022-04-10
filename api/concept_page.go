@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/kataras/iris/v12"
@@ -14,8 +15,14 @@ func init() {
 	GET["/r/{rid:string}"] = region
 	GET["/d/{did:string}"] = discuss
 	GET["/d/{did:string}/p/{page:int}"] = discuss
+	GET["/d/{did:string}/c/{cid:string}"] = comment
 	GET["/u/{uid:string}"] = user
-	GET["/c/{cid:string}"] = comment
+}
+
+type Comment struct {
+	core.Comment
+	Initiator   *core.User
+	CommentHTML string
 }
 
 func index(ctx iris.Context) {
@@ -37,7 +44,13 @@ func region(ctx iris.Context) {
 }
 
 func discuss(ctx iris.Context) {
-	did := ctx.Params().GetStringDefault("did", "1")
+	did := ctx.Params().GetStringDefault("did", "nil")
+	page := ctx.Params().GetInt64Default("p", 1)
+
+	if page < 0 {
+		write_e400_page(errors.New("页码错误"), ctx)
+		return
+	}
 
 	var d core.Discuss
 
@@ -46,9 +59,42 @@ func discuss(ctx iris.Context) {
 		write_e400_page(fmt.Errorf("展示讨论时遇到一个错误 [ %s ]", ret.Error), ctx)
 		return
 	}
+
+	var comments []core.Comment
+
+	ret = core.DB.Find(&comments).Where("discuss_did=? limit ?,? order by create_time desc", d.ID, (page-1)*20, 20)
+	if ret.Error != nil {
+		write_e500_page(fmt.Errorf("服务器出现了一个错误 [%s]", ret.Error.Error()), ctx)
+		return
+	}
+
+	var commentsN []Comment
+	var users = make(map[int64]*core.User)
+	for _, c := range comments {
+		u := users[c.InitiatorUid]
+		if u == nil {
+			u = new(core.User)
+			ret = core.DB.Take(&u, "id=?", c.InitiatorUid)
+			if ret.RowsAffected != 1 {
+				u.Name = "Not Found"
+				u.Avatar = core.CFG.Site.DefaultAvatar
+			}
+			if len(u.Avatar) == 0 {
+				u.Avatar = core.CFG.Site.DefaultAvatar
+			}
+			users[c.InitiatorUid] = u
+		}
+		b := blackfriday.Run([]byte(c.Content))
+		commentsN = append(commentsN, Comment{
+			Comment:     c,
+			Initiator:   u,
+			CommentHTML: string(b),
+		})
+	}
 	b := blackfriday.Run([]byte(d.Content))
 	ctx.ViewData("discuss", &d)
 	ctx.ViewData("discussHTML", string(b))
+	ctx.ViewData("comments", commentsN)
 	ctx.View("discuss/discuss")
 }
 
@@ -70,5 +116,23 @@ func user(ctx iris.Context) {
 }
 
 func comment(ctx iris.Context) {
+	cid := ctx.Params().GetStringDefault("cid", "nil")
+	did := ctx.Params().GetStringDefault("did", "nil")
+	var comment core.Comment
+	ret := core.DB.Take(&comment, "sha1_prefix=?", cid)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("未找到该评论 [%s]", ret.Error), ctx)
+		return
+	}
+	var afteMe int64
+	ret = core.DB.Model(&core.Comment{}).
+		Where("discuss_did=? and create_time>?", comment.DiscussDid, comment.CreateTime).
+		Count(&afteMe)
+	if ret.RowsAffected != 1 {
+		write_e500_page(fmt.Errorf("服务器发生了一个错误 [%s]", ret.Error), ctx)
+		return
+	}
 
+	page := afteMe/20 + 1
+	ctx.Redirect(fmt.Sprintf("/d/%s/p/%d", did, page))
 }

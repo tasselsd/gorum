@@ -68,3 +68,19 @@ type Discuss struct {
 func (Discuss) TableName() string {
 	return "t_discuss"
 }
+
+type Comment struct {
+	ID           int64 `gorm:"primaryKey"`
+	Content      string
+	InitiatorUid int64
+	Initiator    string
+	Likes        int64
+	DiscussDid   int64
+	CreateTime   time.Time
+	Sha1         string
+	ShortSha1    string `gorm:"column:sha1_prefix"`
+}
+
+func (Comment) TableName() string {
+	return "t_comment"
+}

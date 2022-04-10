@@ -4,9 +4,10 @@
 
 {% block body%}
 <div class="sign-area">
+    <div class="sign-tips"></div>
     <form method="post" action="/signin">
-        <input type="text" name="signin" />
-        <input type="password" name="password" />
+        <input type="text" name="signin" placeholder="帐号" required />
+        <input type="password" name="password" placeholder="密码" required />
         <input type="submit" value="登录" />
     </form>
     <div class="sign-links">
@@ -16,4 +17,11 @@
         </ul>
     </div>
 </div>
+<script>
+    var us = new URLSearchParams(window.location.search)
+    if(us.has("l")) {
+        var f = document.querySelector(".sign-area form")
+        f.action = f.action + "?l=" + us.get("l")
+    }
+</script>
 {% endblock %}

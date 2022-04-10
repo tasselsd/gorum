@@ -11,8 +11,9 @@ import (
 )
 
 func init() {
-	GET["/r/{rid:string}/discuss-form"] = postDiscussPage
+	G["/r/{rid:string}/discuss-form"] = postDiscussPage
 	POST["/r/{rid:string}/discuss"] = postDiscuss
+	PO["/d/{did:string}/comment"] = postComment
 }
 
 func postDiscussPage(ctx iris.Context) {
@@ -78,4 +79,38 @@ func postDiscuss(ctx iris.Context) {
 		return
 	}
 	ctx.Redirect("/d/"+d.ShortSha1, iris.StatusSeeOther)
+}
+
+func postComment(ctx iris.Context) {
+	did := ctx.Params().GetStringDefault("did", "nil")
+	content := ctx.PostValue("comment")
+	if len(content) < 5 || len(content) > 1024 {
+		write_e400_page(errors.New("内容长度限制在 [ 5-1M ] 个字符"), ctx)
+		return
+	}
+
+	var discuss core.Discuss
+	ret := core.DB.Take(&discuss, "sha1_prefix=?", did)
+	if ret.RowsAffected != 1 {
+		write_e400_page(fmt.Errorf("不存在的讨论 [%s]", ret.Error), ctx)
+		return
+	}
+
+	s := ctx.Value("session").(*session.Session)
+	sha1 := core.NewSha1Object(content)
+	comment := core.Comment{
+		Content:      content,
+		InitiatorUid: s.ID,
+		Initiator:    s.Name,
+		DiscussDid:   discuss.ID,
+		CreateTime:   time.Now(),
+		Sha1:         sha1.Sha1(),
+		ShortSha1:    sha1.ShortSha1(),
+	}
+	ret = core.DB.Create(&comment)
+	if ret.RowsAffected != 1 {
+		write_e500_page(fmt.Errorf("没有任何内容被存储 [%s]", ret.Error), ctx)
+		return
+	}
+	ctx.Redirect(fmt.Sprintf("/d/%s/c/%s", did, comment.ShortSha1), iris.StatusSeeOther)
 }

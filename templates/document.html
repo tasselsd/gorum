@@ -5,21 +5,36 @@
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>{% block title %}{% endblock %}</title>
     <style>
+        body {margin: 0;padding: 0;}
         h1 {font-size: 22px;color: #69c;}
         a {text-decoration: none;color: #69c}
-        p {padding: 20px 0;}
+        p {padding: 10px 0;margin: 0;}
+        nav {padding: 10px;}
         img {max-width: 100%;}
-        form input {display: block;margin: 5px 0}
+        form {padding-right: 20px;}
+        form input {display: block;margin: 5px 0;padding: 5px;width: 100%;}
+        form input[type="submit"] {padding: 5px 10px;width: initial;float: right;margin-right: -10px;}
+        form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
-        footer {font-size: 14px;margin: 10px 0 0 0;}
+        footer {font-size: 14px;margin: 10px 0 0 0;padding: 20px;text-align: center;}
         ul,li {padding: 0;margin: 0;}
+        blockquote {margin: 0;}
 
-        .recommends {margin: 20px 10px;}
-        .error-nav {margin: 10px 0 0 0}
+        .sign-area {padding: 10px;}
+        .sign-links {padding: 10px;}
+        .recommends {margin: 20px 10px;padding: 10px;}
+        .error-tips {padding: 10px;}
+        .error-nav {margin: 10px 0 0 0;padding: 10px;}
         .avatar {width: 32px;height: 32px;}
+        .markdown-body {margin: 0;padding: 10px;}
     </style>
+    {% block header %}
+    {% endblock %}
 </head>
 <body>
+<nav>
+    <a href="/">首页</a>
+</nav>
 {% block body %}{% endblock %}
 <footer>
     <a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a>

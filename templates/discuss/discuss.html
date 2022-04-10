@@ -1,13 +1,55 @@
 {% extends '../document.html' %}
 
 {% block title %}{{discuss.Name}}{% endblock %}
-
+{% block header %}
+<style>
+.post-comment {padding: 10px 20px 10px 10px;}
+.post-comment textarea {width: 100%;}
+.non-comment {padding: 30px 10px;font-size: 16px;color: #888;background: #f9f9f9;line-height:28px;text-align: center;}
+.comments .comment-top {line-height: 22px;padding: 0 10px;margin: 5px 0 -5px 0;}
+.comments .comment-top .avatar {float: left;width: 22px;height: 22px;margin: 0 5px 0 0;}
+.comments .comment-top .author {font-size: 16px;}
+.comments .comment-top .time {font-size: 12px;color: #666;float: right;}
+.comments ul li {border-top: .5px solid #ccc;margin: -10px 0 0 0}
+</style>
+{% endblock %}
 {% block body%}
 <h1>{{discuss.Name}}</h1>
 <div class="markdown-body">
 {% autoescape off %}
 {{discussHTML}}
 {% endautoescape %}
+</div>
+<div class="comments">
+    {% if comments|length == 0 %}
+    <div class="non-comment">
+        有深度！目前为止还没有人发现我的价值<br />
+        点击下面「 发表评论 」做价值掘金第一人
+    </div>
+    {% else %}
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <div class="comment-top">
+                <img title="avatar" class="avatar" src="{{comment.Initiator.Avatar}}" />
+                <span class="time">{{comment.CreateTime}}</span>
+                <a class="author" href="/u/{{comment.Initiator.ShortSha1}}">{{comment.Initiator.Name}}</a>
+            </div>
+            <div class="markdown-body">
+                {% autoescape off %}
+                {{comment.CommentHTML}}
+                {% endautoescape %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+<div class="post-comment">
+    <form method="post" action="/d/{{discuss.ShortSha1}}/comment">
+        <textarea name="comment" placeholder="你的精彩论点" required></textarea>
+        <input type="submit" value="发表评论" />
+    </form>
 </div>
 {% endblock %}
 

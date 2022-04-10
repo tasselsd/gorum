@@ -2,6 +2,13 @@
 
 {% block title %}在区域〘{{division.Name}}〙发起讨论{% endblock %}
 
+{% block header %}
+<style>
+    .post-tips {padding: 10px;}
+    .post-area {padding: 10px;}
+</style>
+{% endblock %}
+
 {% block body%}
 <div class="post-tips">
     <div class="post-region">{{division.Name}}</div>
@@ -9,9 +16,9 @@
 </div>
 <div class="post-area">
     <form method="post" action="/r/{{division.ShortSha1}}/discuss">
-        <input type="text" name="title" />
-        <textarea name="content"></textarea>
-        <input type="submit" value="发布" />
+        <input type="text" name="title" placeholder="名称" required />
+        <textarea name="content" placeholder="内容" required></textarea>
+        <input type="submit" value="立即发布" />
     </form>
 </div>
 {% endblock %}

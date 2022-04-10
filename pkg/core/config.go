@@ -44,7 +44,11 @@ type cfg struct {
 
 var CFG *cfg
 
-func LoadConfig(configPath string) {
+func LoadConfig(args []string) {
+	configPath := "config.yaml"
+	if len(args) >= 2 {
+		configPath = args[1]
+	}
 	viper.SetDefault("db.dsn", "root:123456@tcp(127.0.0.1:3306)/gorum?charset=utf8mb4&parseTime=True&loc=Local")
 	viper.SetDefault("server.port", 8080)
 	viper.SetDefault("log.level", "info")
