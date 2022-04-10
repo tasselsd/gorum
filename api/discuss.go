@@ -40,6 +40,7 @@ func postDiscussPage(ctx iris.Context) {
 		write_e400_page(err, ctx)
 		return
 	}
+	ctx.Value("nav").(*core.NavStack).Push("辖区选择", "/region-selector")
 	ctx.ViewData("division", r)
 	ctx.View("discuss/post-discuss")
 }

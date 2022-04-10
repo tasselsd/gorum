@@ -62,7 +62,7 @@ func index(ctx iris.Context) {
 func region(ctx iris.Context) {
 	rid := ctx.Params().GetStringDefault("rid", "1")
 	var region core.Region
-	ret := core.DB.Take(&region, "sha1_prefix=? or r_name=?", rid, rid)
+	ret := core.DB.Take(&region, "sha1_prefix=? or r_name=? or id=?", rid, rid, rid)
 	if ret.RowsAffected != 1 {
 		write_e400_page(fmt.Errorf("不存在的辖区 [%s]", ret.Error), ctx)
 		return
@@ -127,6 +127,8 @@ func discuss(ctx iris.Context) {
 		})
 	}
 	b := blackfriday.Run([]byte(d.Content), blackfriday.WithExtensions(blackfriday.HardLineBreak))
+
+	ctx.Value("nav").(*core.NavStack).Push(d.Division, fmt.Sprintf("/r/%d", d.DivisionRid))
 	ctx.ViewData("discuss", &d)
 	ctx.ViewData("discussHTML", string(bluemonday.UGCPolicy().SanitizeBytes(b)))
 	ctx.ViewData("comments", commentsN)

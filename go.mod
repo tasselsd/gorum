@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/google/uuid v1.3.0
 	github.com/kataras/iris/v12 v12.2.0-alpha9.0.20220318202522-45d693850bee
+	github.com/microcosm-cc/bluemonday v1.0.18
 	github.com/orcaman/concurrent-map v1.0.0
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/spf13/viper v1.10.1
@@ -44,7 +45,6 @@ require (
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mailgun/raymond/v2 v2.0.46 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/microcosm-cc/bluemonday v1.0.18 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect

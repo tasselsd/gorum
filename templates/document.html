@@ -12,7 +12,7 @@
         nav a {color: #ffff;font-weight: bold;}
         img {max-width: 100%;}
         form {padding-right: 5px;}
-        form input {display: block;margin: 5px 0;padding: 5px;width: 100%;}
+        form input {display: block;margin: 10px 0;padding: 5px;width: 100%;}
         form input[type="submit"] {padding: 5px 10px;width: initial;float: right;margin-right: -10px;}
         form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
@@ -20,6 +20,9 @@
         ul,li {padding: 0;margin: 0;list-style: none;;}
         blockquote {margin: 0;}
 
+        nav .links {display: inline-block;}
+        nav .links li {display: inline-block;}
+        nav .links li:not(:first-child)::before {content: " > ";font-size: 14px;padding: 0 3px;color: #69c;}
         .nav-profile {float: right;line-height: 22px;}
         .nav-profile .avatar {width: 22px;height: 22px;float: left;}
         .sign-area {padding: 10px 20px 10px 10px;}
@@ -43,7 +46,12 @@
 </head>
 <body>
 <nav>
-    <a href="/">首页</a>
+    <ul class="links">
+        <li><a href="/">首页</a></li>
+        {% for n in nav.List() %}
+        <li><a href="{{n.uri}}">{{n.name}}</a></li>
+        {% endfor %}
+    </ul>
     <div class="nav-profile">
         {% if session %}
         <a href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
@@ -54,6 +62,8 @@
 </nav>
 {% block body %}{% endblock %}
 <footer>
+    Running on <a href="qcloud.com">Tencent Cloud</a> | Powered by <a href="https://github.com/tasselsd/gorum">Gorum</a>
+    <br />
     <a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a>
 </footer>
 </body>

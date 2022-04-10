@@ -26,6 +26,7 @@ var (
 
 func StartEngine() {
 	app = iris.Default()
+	app.Use(navStack)
 	app.Use(loadAuthentication)
 	app.WrapRouter(registerAssets)
 	app.Get("/generate_204", generate_204)
@@ -67,6 +68,13 @@ func response_404(ctx iris.Context) {
 	ctx.ViewData("statusCode", iris.StatusNotFound)
 	ctx.ViewData("detail", "Not Found")
 	ctx.View("failed")
+}
+
+func navStack(ctx iris.Context) {
+	stack := core.NewNavStack()
+	ctx.Values().Set("nav", stack)
+	ctx.ViewData("nav", stack)
+	ctx.Next()
 }
 
 func authenticationRequired(ctx iris.Context) {

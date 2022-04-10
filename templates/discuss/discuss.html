@@ -10,7 +10,7 @@
         font-size: 1.2em;
         font-weight: bold;
         display: table;
-        margin: 2em auto 1em;
+        margin: 0 auto 0.6em;
         padding: 1em 1em 0 1em;
         border-bottom: 2px solid rgba(15, 76, 129, 1);
         color: #3f3f3f;
@@ -72,6 +72,8 @@
         border-radius: 4px;
     }
 
+    .markdown-body img {display: block;margin: auto;}
+
     .post-comment {
         padding: 10px 20px 10px 10px;
     }
@@ -92,7 +94,6 @@
     .comments p {margin: 0 8px;}
     .comments .comment-top {
         line-height: 22px;
-        padding: 0 10px;
         margin: 5px 0 -5px 0;
     }
 
@@ -116,12 +117,12 @@
 
     .comments ul li {
         border-top: .5px solid #ccc;
-        margin: -10px 0 0 0
+        margin: -10px 10px 0 10px
     }
 </style>
 {% endblock %}
 {% block body%}
-<h1>{{discuss.Name}}</h1>
+<div style="padding: 0 1em;margin-top: 2em;"><h1>{{discuss.Name}}</h1></div>
 <div class="markdown-body">
     {% autoescape off %}
     {{discussHTML}}
