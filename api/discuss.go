@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/kataras/iris/v12"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday/v2"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
 )
@@ -63,10 +65,18 @@ func postDiscuss(ctx iris.Context) {
 		write_e400_page(errors.New("标题长度被限制在 [ 4-128 ] 个字符"), ctx)
 		return
 	}
+
 	if len(content) < 10 || len(content) > 1024*1024 {
 		write_e400_page(errors.New("内容被限制在 [ 10-1M ] 个字符"), ctx)
 		return
 	}
+	b := blackfriday.Run([]byte(content), blackfriday.WithExtensions(blackfriday.HardLineBreak))
+	finalByets := bluemonday.UGCPolicy().SanitizeBytes(b)
+	if len(finalByets) < 10 {
+		write_e400_page(errors.New("输入些可见字符吧！"), ctx)
+		return
+	}
+
 	s := ctx.Values().Get("session").(*session.Session)
 
 	r, err := _regionByRid(rid)

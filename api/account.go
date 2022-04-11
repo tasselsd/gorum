@@ -163,11 +163,11 @@ func resetPassword(ctx iris.Context) {
 	}
 	ret = core.DB.Model(&user).Update("passwd", core.NewSha1Object(passwd).Sha1())
 	if ret.RowsAffected != 1 {
-		write_e500_page(ret.Error, ctx)
+		write_e500_page(fmt.Errorf("没有任何内容被更新 [%s]", ret.Error), ctx)
 		return
 	}
 	ctx.ViewData("detail", "密码更新成功！")
-	ctx.View("success")
+	ctx.View("succeed")
 }
 
 func signUpPage(ctx iris.Context) {
@@ -192,7 +192,7 @@ func resetPasswordPage(ctx iris.Context) {
 	}
 	ctx.ViewData("token", token)
 	ctx.ViewData("user", user)
-	ctx.View("account/rest-password")
+	ctx.View("account/reset-password")
 }
 
 func activationPage(ctx iris.Context) {
