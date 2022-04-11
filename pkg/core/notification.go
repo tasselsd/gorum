@@ -55,7 +55,7 @@ func SendResetPassword(email, activationToken string) error {
 	if EMAIL == nil {
 		return errors.New("notification.smtp not found")
 	}
-	return EMAIL.Send(email, "你的帐号正待激活！", fmt.Sprintf(`
+	return EMAIL.Send(email, "重置密码！", fmt.Sprintf(`
 	<h1>永远不要、不要、不要、不要放弃<br />Never, never, never, never give up</h1>
 	<a href="https://%s/reset-password/%s">https://%s/reset-password/%s</a>
 	`, CFG.Site.Domain, activationToken, CFG.Site.Domain, activationToken))

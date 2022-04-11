@@ -149,7 +149,7 @@ func requestResetPassword(ctx iris.Context) {
 		return
 	}
 	ctx.ViewData("detail", "重置申请已提交，请从邮箱打开重置密码的链接，以完成密码重置")
-	ctx.View("success")
+	ctx.View("succeed")
 }
 
 func resetPassword(ctx iris.Context) {
