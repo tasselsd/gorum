@@ -8,4 +8,5 @@ import "embed"
 //go:embed index.html
 //go:embed succeed.html
 //go:embed failed.html
+//go:embed ban.html
 var FS embed.FS

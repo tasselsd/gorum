@@ -6,9 +6,11 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/kataras/iris/v12 v12.2.0-alpha9.0.20220318202522-45d693850bee
 	github.com/microcosm-cc/bluemonday v1.0.18
+	github.com/muesli/cache2go v0.0.0-20211005105910-8e46465cca4a
 	github.com/orcaman/concurrent-map v1.0.0
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/spf13/viper v1.10.1
+	github.com/tomasen/realip v0.0.0-20180522021738-f0c99a92ddce
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gorm.io/driver/mysql v1.3.3
 	gorm.io/gorm v1.23.4

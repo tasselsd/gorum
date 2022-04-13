@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/kataras/iris/v12"
+	"github.com/muesli/cache2go"
 	"github.com/tasselsd/gorum/assets"
 	"github.com/tasselsd/gorum/pkg/core"
 	"github.com/tasselsd/gorum/pkg/session"
 	"github.com/tasselsd/gorum/templates"
+	"github.com/tomasen/realip"
 )
 
 var (
@@ -28,6 +31,7 @@ func StartEngine() {
 	app = iris.Default()
 	app.Use(navStack)
 	app.Use(loadAuthentication)
+	app.Use(ipRateLimiter)
 	app.WrapRouter(registerAssets)
 	app.Get("/generate_204", generate_204)
 	app.OnErrorCode(iris.StatusNotFound, response_404)
@@ -115,4 +119,25 @@ func registerAssets(w http.ResponseWriter, r *http.Request, router http.HandlerF
 		return
 	}
 	router.ServeHTTP(w, r)
+}
+
+var ipRate = cache2go.Cache("ipRateLimiter")
+
+func ipRateLimiter(ctx iris.Context) {
+
+	banTime := time.Minute * 10
+
+	ip := realip.FromRequest(ctx.Request())
+	ipRate.NotFoundAdd(ip, banTime, nil)
+
+	item, _ := ipRate.Value(ip)
+	if item.AccessCount() > 6000 {
+		since := time.Since(item.CreatedOn())
+		if since < banTime {
+			write_ban_page(banTime-since, ctx)
+			return
+		}
+		ipRate.Delete(ip)
+	}
+	ctx.Next()
 }
