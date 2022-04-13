@@ -131,7 +131,7 @@ func ipRateLimiter(ctx iris.Context) {
 	ipRate.NotFoundAdd(ip, banTime, nil)
 
 	item, _ := ipRate.Value(ip)
-	if item.AccessCount() > 6000 {
+	if item.AccessCount() > 60*10*5 {
 		since := time.Since(item.CreatedOn())
 		if since < banTime {
 			write_ban_page(banTime-since, ctx)
