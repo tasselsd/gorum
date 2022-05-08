@@ -32,6 +32,8 @@ type CFG_Server struct {
 type CFG_Site struct {
 	Domain        string
 	DefaultAvatar string
+	Brand         string
+	Footer        string
 }
 
 type cfg struct {

@@ -12,3 +12,8 @@ notification:
     password: <password>
 site:
   domain: <your_site_name>
+  brand: <logo_text>
+  footer: |
+    Powered by <a href="https://github.com/tasselsd/gorum">Gorum</a>
+    <br />
+    <a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a>

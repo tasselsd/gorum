@@ -29,9 +29,10 @@ var (
 
 func StartEngine() {
 	app = iris.Default()
-	app.Use(navStack)
-	app.Use(loadAuthentication)
-	app.Use(ipRateLimiter)
+	app.Use(applyNavStack)
+	app.Use(applySiteProperties)
+	app.Use(applyAuthentication)
+	app.Use(applyIpRateLimiter)
 	app.WrapRouter(registerAssets)
 	app.Get("/generate_204", generate_204)
 	app.OnErrorCode(iris.StatusNotFound, response_404)
@@ -74,10 +75,15 @@ func response_404(ctx iris.Context) {
 	ctx.View("failed")
 }
 
-func navStack(ctx iris.Context) {
+func applyNavStack(ctx iris.Context) {
 	stack := core.NewNavStack()
 	ctx.Values().Set("nav", stack)
 	ctx.ViewData("nav", stack)
+	ctx.Next()
+}
+
+func applySiteProperties(ctx iris.Context) {
+	ctx.ViewData("site", core.CFG.Site)
 	ctx.Next()
 }
 
@@ -103,7 +109,7 @@ func _sessionFromToken(ctx iris.Context) *session.Session {
 	return s
 }
 
-func loadAuthentication(ctx iris.Context) {
+func applyAuthentication(ctx iris.Context) {
 	s := _sessionFromToken(ctx)
 	if s != nil && len(s.Avatar) == 0 {
 		s.Avatar = core.CFG.Site.DefaultAvatar
@@ -123,7 +129,7 @@ func registerAssets(w http.ResponseWriter, r *http.Request, router http.HandlerF
 
 var ipRate = cache2go.Cache("ipRateLimiter")
 
-func ipRateLimiter(ctx iris.Context) {
+func applyIpRateLimiter(ctx iris.Context) {
 
 	banTime := time.Minute * 10
 
