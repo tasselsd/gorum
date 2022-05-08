@@ -76,6 +76,7 @@
         form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
         footer {font-size: 14px;margin: 10px 0 0 0;color: #000;}
+        footer a {padding: 0;}
         ul,li {padding: 0;margin: 0;list-style: none;;}
         blockquote {margin: 0;}
 
@@ -100,14 +101,14 @@
         .flexable {line-height: 28px;}
 
         .wrapper {display: flex;justify-content: space-between;}
+        .main {width: 100%;}
         .sidebar {display: none;margin-top: 10px;}
-        .main {width: 745px;margin:10px 10px 0 0;}
         .paper {background-color: var(--main-background);}
         .empty {
             text-align: center;font-size: 18px;color: var(--muted-text);
             padding: 50px 0;
             border: 3px dashed var(--muted-text);
-            margin-left: 12px;
+            margin: 0 12px;
         }
         @media screen and (min-width: 1080px) {
             body {
@@ -119,11 +120,12 @@
                 margin: 0 auto;
                 padding: 8px 0;
             }
-
+            
             .paper {padding: 10px;border: 1px #dfdfdf solid;}
             nav {background-color: #fff;border: 1px #dfdfdf solid;}
             nav .links li:not(:first-child):before {padding: 0 10px;}
             nav .logo a {font-size: 26px;}
+            .main {width: 745px;margin:10px 10px 0 0;}
             .sidebar {display: block;width: 315px;}
             footer {color: var(--muted-dark-10);font-size: 16px;}
             .luxun {margin-top: 20px;line-height: 26px;}
