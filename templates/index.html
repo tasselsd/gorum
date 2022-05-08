@@ -7,22 +7,58 @@
     header {line-height: 32px;padding: 10px;}
     header .avatar {float: left;margin-right: 5px;}
     header span {font-size: 16px;}
-    .recommends li {line-height: 22px;margin-bottom: 15px;}
-    .recommends li .avatar2profile {float: left;width: 22px;height: 22px;padding: 0 10px 0 0 ;}
+    .recommends {padding: 0;}
+    .recommends li {line-height: 22px;}
+
+    .article-card {
+        display: flex;
+        margin-left: 5px;
+        color: var(--muted-dark-10);
+        padding: 8px 0;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .article-card a {color: var(--primary);}
+    .avatar-box {width: 40px;height: 40px;display: flex;justify-content: center;}
+    .avatar-box .avatar2profile {width: 30px;height: 30px;}
+    .avatar-box .avatar2profile img {border-radius: 50%;}
+    .article-box {
+        padding: 0 0 5px 0;margin-left: 5px;
+        border-bottom: 1px solid var(--muted-light);
+        display: flex;width: calc(100% - 30px);
+        justify-content: space-between;flex-direction: column;}
+    .article-info {font-size: 14px;margin-top: 5px;}
+    @media screen and (min-width: 1080px) {
+        .avatar-box {width: 70px;height: 70px;}
+        .avatar-box .avatar2profile,.avatar-box .avatar2profile img {width: 60px;height: 60px;}
+        .article-box {margin-left: 10px;}
+        header {display: none;}
+    }
 </style>
 {% endblock %}
 
 {% block body%}
 <header>
+    {% if session %}
     <a href="/region-selector">发布一个讨论</a>
+    {% endif %}
 </header>
 <ul class="recommends">
+{% if recommends %}
 {% for r in recommends %}
-    <li>
+    <li class="article-card">
+        <div class="avatar-box">
         <a class="avatar2profile" href="/u/{{r.Initiator.ShortSha1}}"><img src="{{r.Initiator.Avatar}}" title="{{r.Initiator.Name}}" /></a>
-        <a class="discuss" href="/d/{{r.ShortSha1}}">{{r.Name}}</a>
+        </div>
+        <div class="article-box">
+            <a class="discuss" href="/d/{{r.ShortSha1}}">{{r.Name}}</a>
+            <div class="article-info">46分钟前 <a href="/u/{{r.Initiator.ShortSha1}}">{{r.Initiator.Name}}</a></div>
+        </div>
     </li>
 {% endfor %}
+{% else %}
+<li class="empty">还没有～ 还没有～</li>
+{% endif %}
 </ul>
 {% endblock %}
 

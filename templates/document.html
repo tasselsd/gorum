@@ -4,27 +4,90 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>{% block title %}{% endblock %}</title>
-    <style>
-        body {margin: 0;padding: 0;}
-        a {text-decoration: none;color: #69c}
+    <style type="text/css">
+        html{
+            --primary: #41403e;
+            --secondary: #0071de;
+            --success: #86a361;
+            --warning: #ddcd45;
+            --danger: #a7342d;
+            --muted: #868e96;
+            --primary-light: #c1c0bd;
+            --secondary-light: #deefff;
+            --success-light: #d0dbc2;
+            --warning-light: #f5f0c6;
+            --danger-light: #f0cbc9;
+            --muted-light: #e6e7e9;
+            --primary-dark: #000;
+            --secondary-dark: #000;
+            --success-dark: #374427;
+            --warning-dark: #746a15;
+            --danger-dark: #000;
+            --muted-dark: #313538;
+            --primary-light-10: #5b5a57;
+            --secondary-light-10: #128bff;
+            --success-light-10: #9fb681;
+            --warning-light-10: #e5d970;
+            --danger-light-10: #cb453c;
+            --muted-light-10: #a1a8ae;
+            --primary-dark-10: #272625;
+            --secondary-dark-10: #0057ab;
+            --success-dark-10: #6c844d;
+            --warning-dark-10: #cab925;
+            --danger-dark-10: #7f2722;
+            --muted-dark-10: #6c757d;
+            --primary-shaded-50: #c1c0bd;
+            --primary-shaded-70: #f2f2f2;
+            --white-dark: rgba(0, 0, 0, .03);
+            --white-dark-light-80: hsla(0, 0%, 80%, .03);
+            --light-dark: rgba(0, 0, 0, .7);
+            --white: #fff;
+            --main-background: #fff;
+            --secondary-background: rgba(255, 255, 255, .8);
+            --main-background-light: #fff;
+            --primary-text: #272625;
+            --secondary-text: #0057ab;
+            --success-text: #6c844d;
+            --warning-text: #cab925;
+            --danger-text: #7f2722;
+            --muted-text: #6c757d;
+            --primary-inverse: #fff;
+        }
+        body {margin: 0;padding: 0;color: #000;}
+        a {text-decoration: none;color: var(--primary);padding: 0 2px;}
         p {padding: 10px 0;margin: 0;}
-        nav {padding: 5px 10px;background: #fff;font-size: 16px;line-height: 22px;}
+        nav {padding: 12px 8px;background: #fff;font-size: 16px;line-height: 28px;}
         nav a {color: #69c;font-weight: bold;}
+        nav .logo {display: inline-block;}
+        nav .logo a {
+            height: 38px;
+            background: var(--secondary);
+            border-radius: 3px;
+            color: #fff;
+            margin-left: 4px;
+            font-size: 22px;
+            padding: 0 5px;
+            
+        }
         img {max-width: 100%;}
         form {padding-right: 5px;}
         form input {display: block;margin: 10px 0;padding: 5px;width: 100%;}
         form input[type="submit"] {padding: 5px 10px;width: initial;float: right;margin-right: -10px;}
         form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
-        footer {font-size: 14px;margin: 10px 0 0 0;padding: 20px;text-align: center;}
+        footer {font-size: 14px;margin: 10px 0 0 0;color: #000;}
         ul,li {padding: 0;margin: 0;list-style: none;;}
         blockquote {margin: 0;}
 
-        nav .links {display: inline-block;}
+        nav .links {align-items: flex-end;}
         nav .links li {display: inline-block;}
-        nav .links li:not(:first-child)::before {content: " > ";font-size: 14px;padding: 0 3px;color: #222;}
-        .nav-profile {float: right;line-height: 22px;}
-        .nav-profile .avatar {width: 22px;height: 22px;float: left;}
+        nav .links li:not(:first-child):before {content: " > ";font-size: 18px;padding: 0 5px;color: #222;}
+        nav .links li:last-child::before {content: "|";font-size: 18px;padding: 0 5px;}
+        
+        nav .links li .avatar {width: 22px;height: 22px;float: left;}
+        nav .links li a {color: var(--primary);font-size: 16px;}
+
+        .profile-link {display: inline-block;}
         .sign-area {padding: 10px 20px 10px 10px;}
         .sign-tips {font-size: 22px;padding: 10px 0 20px 0;}
         .sign-links {padding: 10px 5px;}
@@ -34,11 +97,44 @@
         .error-nav,.success-nav {margin: 10px 0 0 0;padding: 10px;}
         .avatar {width: 32px;height: 32px;}
         .markdown-body {margin: 0;padding: 10px;}
-        @media screen and (min-width: 720px) {
+        .flexable {line-height: 28px;}
+
+        .wrapper {display: flex;justify-content: space-between;}
+        .sidebar {display: none;margin-top: 10px;}
+        .main {width: 745px;margin:10px 10px 0 0;}
+        .paper {background-color: var(--main-background);}
+        .empty {
+            text-align: center;font-size: 18px;color: var(--muted-text);
+            padding: 50px 0;
+            border: 3px dashed var(--muted-text);
+            margin-left: 12px;
+        }
+        @media screen and (min-width: 1080px) {
             body {
-                max-width: 720px;
-                margin: 0 auto;
+                background-color: #e9ecef;
             }
+            .wrapper {
+                max-width: 1080px;
+                width: 100%;
+                margin: 0 auto;
+                padding: 8px 0;
+            }
+
+            .paper {padding: 10px;border: 1px #dfdfdf solid;}
+            nav {background-color: #fff;border: 1px #dfdfdf solid;}
+            nav .links li:not(:first-child):before {padding: 0 10px;}
+            nav .logo a {font-size: 26px;}
+            .sidebar {display: block;width: 315px;}
+            footer {color: var(--muted-dark-10);font-size: 16px;}
+            .luxun {margin-top: 20px;line-height: 26px;}
+            .padding20 {padding: 20px;}
+            .main-avatar {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                display: block;
+                margin-bottom: 20px;
+                border: 1px solid var(--primary);}
         }
     </style>
     {% block header %}
@@ -46,26 +142,49 @@
 </head>
 <body>
 <nav>
-    <ul class="links">
-        <li><a href="/">首页</a></li>
-        {% for n in nav.List() %}
-        <li><a href="{{n.uri}}">{{n.name}}</a></li>
-        {% endfor %}
-    </ul>
-    <div class="nav-profile">
-        {% if session %}
-        <a href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
-        {% else %}
-        <a href="/signin">登录</a>
-        {% endif %}
+    <div class="wrapper">
+        <div class="logo">
+            <a href="/">{{site.Brand}}</a>
+        </div>
+        <ul class="links">
+            <li><a href="/">首页</a></li>
+            {% for n in nav.List() %}
+            <li><a href="{{n.uri}}">{{n.name}}</a></li>
+            {% endfor %}
+            <li>
+                {% if session %}
+                <a class="profile-link" href="/u/{{session.ShortSha1}}"><img class="avatar" src="{{session.Avatar}}" /><span>{{session.Name}}</span></a>
+                {% else %}
+                <a href="/signin">登录</a>
+                {% endif %}
+            </li>
+        </ul>
     </div>
 </nav>
-{% block body %}{% endblock %}
-<footer>
-    Running on <a href="qcloud.com">Tencent Cloud</a> | Powered by <a href="https://github.com/tasselsd/gorum">Gorum</a>
-    <br />
-    <a href="https://beian.miit.gov.cn/">鲁ICP备19064057号-1</a>
-</footer>
+<div class="wrapper">
+    <div class="main">
+        <div class="paper">{% block body %}{% endblock %}</div>
+        <footer>
+            <div class="paper flexable" style="padding: 20px 10px;">
+                {% autoescape off %}
+                {{site.Footer}}
+                {% endautoescape %}
+            </div>
+        </footer>
+    </div>
+    <div class="sidebar">
+        <div class="paper padding20">
+            {% if session %}
+            <img class="main-avatar" src="{{session.Avatar}}" title="{{session.Name}}" />
+            <a class="x-post-btn" href="/region-selector">发布一个讨论</a>
+            <div class="x-logout-btn"><a href="/signout">退出</a></div>
+            {% else %}
+            <div class="x-login-btn">辛苦了！先<a href="/signin">登录</a>吧~</div>
+            {% endif %}
+            <div class="luxun">悲剧将人生的有价值的东西毁灭给人看，喜剧将那无价值的撕破给人看。写不出的时候，不硬写！</div>
+        </div>
+    </div>
+</div>
 </body>
 {% block footer %}{% endblock %}
 </html>

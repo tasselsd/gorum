@@ -6,15 +6,20 @@
 <style>
     .region {padding: 10px 25px;}
     .region li {padding: 5px 0;list-style:disc}
+    .x-post-btn {display: none;}
 </style>
 {% endblock %}
 
 {% block body%}
 <div class="region">
     <ul>
+        {% if regions %}
         {% for r in regions %}
         <li><a href="/r/{{r.ShortSha1}}/discuss-form">{{r.Name}}</a></li>
         {% endfor %}
+        {% else %}
+        <li class="empty">还没有～还没有～</li>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
