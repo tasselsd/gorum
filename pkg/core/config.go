@@ -34,6 +34,7 @@ type CFG_Site struct {
 	DefaultAvatar string
 	Brand         string
 	Footer        string
+	Name          string
 }
 
 type cfg struct {
@@ -54,7 +55,8 @@ func LoadConfig(args []string) {
 	viper.SetDefault("db.dsn", "root:123456@tcp(127.0.0.1:3306)/gorum?charset=utf8mb4&parseTime=True&loc=Local")
 	viper.SetDefault("server.port", 8080)
 	viper.SetDefault("log.level", "info")
-	viper.SetDefault("site.defaultAvatar", "/assets/avatar.png")
+	viper.SetDefault("site.defaultAvatar", "/assets/avatar.svg")
+	viper.SetDefault("site.name", "未命名站点")
 	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
 	viper.SetConfigFile(configPath)
 	err := viper.ReadInConfig() // Find and read the config file
