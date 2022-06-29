@@ -7,73 +7,46 @@
     <title>{% block title %}{% endblock %}</title>
     <style type="text/css">
         html{
-            --primary: #41403e;
-            --secondary: #0071de;
+            --primary: #24292f;
             --success: #86a361;
             --warning: #ddcd45;
             --danger: #a7342d;
-            --muted: #868e96;
-            --primary-light: #c1c0bd;
-            --secondary-light: #deefff;
-            --success-light: #d0dbc2;
-            --warning-light: #f5f0c6;
-            --danger-light: #f0cbc9;
-            --muted-light: #e6e7e9;
-            --primary-dark: #000;
-            --secondary-dark: #000;
-            --success-dark: #374427;
-            --warning-dark: #746a15;
-            --danger-dark: #000;
-            --muted-dark: #313538;
-            --primary-light-10: #5b5a57;
-            --secondary-light-10: #128bff;
-            --success-light-10: #9fb681;
-            --warning-light-10: #e5d970;
-            --danger-light-10: #cb453c;
-            --muted-light-10: #a1a8ae;
-            --primary-dark-10: #272625;
-            --secondary-dark-10: #0057ab;
-            --success-dark-10: #6c844d;
-            --warning-dark-10: #cab925;
-            --danger-dark-10: #7f2722;
-            --muted-dark-10: #6c757d;
-            --primary-shaded-50: #c1c0bd;
-            --primary-shaded-70: #f2f2f2;
-            --white-dark: rgba(0, 0, 0, .03);
-            --white-dark-light-80: hsla(0, 0%, 80%, .03);
-            --light-dark: rgba(0, 0, 0, .7);
-            --white: #fff;
             --main-background: #fff;
-            --secondary-background: rgba(255, 255, 255, .8);
-            --main-background-light: #fff;
-            --primary-text: #272625;
-            --secondary-text: #0057ab;
-            --success-text: #6c844d;
-            --warning-text: #cab925;
-            --danger-text: #7f2722;
-            --muted-text: #6c757d;
-            --primary-inverse: #fff;
+            --border: #d0d7de;
+            --border-focus: #0969da;
         }
-        body {margin: 0;padding: 0;color: #000;}
-        a {text-decoration: none;color: var(--primary);padding: 0 2px;}
+        body {margin: 0;padding: 0;color: var(--primary);font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";}
+        a {text-decoration: none;color: var(--border-focus);padding: 0 2px;}
         p {padding: 10px 0;margin: 0;}
         nav {padding: 12px 8px;background: #fff;font-size: 16px;line-height: 28px;}
         nav a {color: #69c;font-weight: bold;}
         nav .logo {display: inline-block;}
         nav .logo a {
             height: 38px;
-            background: var(--secondary);
-            border-radius: 3px;
-            color: #fff;
-            margin-left: 4px;
+            background: none;
+            color: var(--primary-dark-10);
             font-size: 22px;
-            padding: 0 5px;
-            
+            font-weight: bold;
         }
         img {max-width: 100%;}
         form {padding-right: 5px;}
-        form input {display: block;margin: 10px 0;padding: 5px;width: 100%;}
-        form input[type="submit"] {padding: 5px 10px;width: initial;float: right;margin-right: -10px;}
+        form input:focus {border: 1px solid var(--border-focus);}
+        form input {
+            display: block;
+            margin: 12px 0;
+            padding: 10px 5px;
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            outline: none;
+        }
+        form input[type="submit"] {
+            padding: 10px 15px;
+            width: initial;
+            float: right;
+            margin: 1px -12px 0 0;
+            background-color: #ddf4ff;
+        }
         form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
         code {font-size: 16px;}
         footer {font-size: 14px;margin: 10px 0 0 0;color: #000;}
@@ -92,7 +65,7 @@
         .profile-link {display: inline-block;}
         .sign-area {padding: 10px 20px 10px 10px;}
         .sign-tips {font-size: 22px;padding: 10px 0 20px 0;}
-        .sign-links {padding: 10px 5px;}
+        .sign-links {padding: 0;line-height: 28px;}
         .activation-tips, .activated-tips, .signout-tips, .success-tips {padding: 10px;}
         .recommends {margin: 20px 0;padding: 10px;}
         .error-tips {padding: 10px;}
@@ -184,7 +157,7 @@
             {% else %}
             <div class="x-login-btn">辛苦了！先<a href="/signin">登录</a>吧~</div>
             {% endif %}
-            <div class="luxun">悲剧将人生的有价值的东西毁灭给人看，喜剧将那无价值的撕破给人看。写不出的时候，不硬写！</div>
+            <div class="luxun">悲剧将人生的有价值的东西毁灭给人看，喜剧将那无价值的撕破给人看。<br /><br />写不出的时候，不硬写！</div>
         </div>
     </div>
 </div>

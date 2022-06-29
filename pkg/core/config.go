@@ -57,6 +57,8 @@ func LoadConfig(args []string) {
 	viper.SetDefault("log.level", "info")
 	viper.SetDefault("site.defaultAvatar", "/assets/avatar.svg")
 	viper.SetDefault("site.name", "未命名站点")
+	viper.SetDefault("site.brand", "未命名站点")
+	viper.SetDefault("notification", make(map[string]string))
 	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
 	viper.SetConfigFile(configPath)
 	err := viper.ReadInConfig() // Find and read the config file
