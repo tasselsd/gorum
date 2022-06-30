@@ -5,9 +5,10 @@
 <style>
     h1 {
         line-height: 32px;
-        font-size: 32px;
+        font-size: 22px;
         font-weight: 400;
-        padding: 10px 0 15px 0;
+        padding: 0 0 5px 0;
+        margin-top: -20px;
         border-bottom: 1px solid var(--border);
         color: #3f3f3f;
     }
@@ -78,10 +79,11 @@
     }
 
     .non-comment {
-        padding: 25px 10px;
+        padding: 20px 10px;
         font-size: 14px;
-        color: #888;
-        line-height: 26px;
+        color: #999;
+        line-height: 24px;
+        font-style: italic;
         text-align: center;
     }
 
@@ -112,6 +114,14 @@
     .comments ul li {
         border-top: .5px solid #ccc;
         margin: -10px 10px 0 10px
+    }
+
+    @media screen and (min-width: 1080px) {
+        h1 {
+            font-size: 26px;
+            padding: 10px 0 15px 0;
+            margin-top: 0;
+        }
     }
 </style>
 {% endblock %}

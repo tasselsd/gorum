@@ -30,7 +30,7 @@
         }
         img {max-width: 100%;}
         form {padding-right: 5px;}
-        form input:focus {border: 1px solid var(--border-focus);}
+        form input:focus,form textarea:focus {border: 1px solid var(--border-focus);}
         form input {
             display: block;
             margin: 12px 0;
@@ -41,13 +41,20 @@
             outline: none;
         }
         form input[type="submit"] {
-            padding: 10px 15px;
+            padding: 8px 15px;
             width: initial;
             float: right;
             margin: 1px -12px 0 0;
             background-color: #ddf4ff;
         }
-        form textarea {max-width: 100%;min-width: 100%;min-height: 80px;max-height: 1024px;padding: 5px;}
+        form textarea {
+            max-width: 100%;
+            min-width: 100%;
+            min-height: 80px;
+            max-height: 1024px;
+            border: 1px solid var(--border);
+            padding: 5px;
+        }
         code {font-size: 16px;}
         footer {font-size: 14px;margin: 10px 0 0 0;color: #000;}
         footer a {padding: 0;}
@@ -123,7 +130,6 @@
             <a href="/">{{site.Brand}}</a>
         </div>
         <ul class="links">
-            <li><a href="/">首页</a></li>
             {% for n in nav.List() %}
             <li><a href="{{n.uri}}">{{n.name}}</a></li>
             {% endfor %}
