@@ -4,11 +4,12 @@
 {% block header %}
 <style>
     h1 {
-        line-height: 32px;
-        font-size: 22px;
+        line-height: 28px;
+        font-size: 20px;
         font-weight: 400;
         padding: 0 0 5px 0;
         margin-top: -20px;
+        margin-bottom: 0;
         border-bottom: 1px solid var(--border);
         color: #3f3f3f;
     }
@@ -68,6 +69,8 @@
         border-radius: 4px;
     }
 
+    .markdown-body {margin: 0;padding: 0 10px;}
+
     .markdown-body img {display: block;margin: auto;}
 
     .post-comment {
@@ -80,8 +83,8 @@
 
     .non-comment {
         padding: 20px 10px;
-        font-size: 14px;
-        color: #999;
+        font-size: 17px;
+        color: var(--border);
         line-height: 24px;
         font-style: italic;
         text-align: center;
@@ -135,7 +138,6 @@
 <div class="comments">
     {% if comments|length == 0 %}
     <div class="non-comment">
-        有深度！目前为止还没有人发现我的内涵<br />
         {% if session %}点击下面{% else %}<a href="/signin?l=/d/{{discuss.ShortSha1}}">登录</a>{% endif %}「 发表评论 」做价值掘金第一人
     </div>
     {% else %}
