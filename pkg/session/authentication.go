@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 	cmap "github.com/orcaman/concurrent-map"
 	"github.com/tasselsd/gorum/pkg/core"
 )
@@ -41,6 +42,10 @@ func (sm *InMemorySessionManager) LoadSession(token string) *Session {
 		t := s.(map[string]any)["t"].(int64)
 		if t < time.Now().Add(-time.Hour*24).UnixMilli() {
 			sm.store.Remove(token)
+			ws := s.(map[string]any)["s"].(*Session).ws
+			if ws != nil {
+				ws.Close()
+			}
 			return nil
 		}
 		sS := s.(map[string]any)
@@ -62,6 +67,7 @@ var (
 type Session struct {
 	core.User
 	token string
+	ws    *websocket.Conn
 }
 
 func NewSession(user *core.User) *Session {
@@ -92,12 +98,33 @@ func (s *Session) JSON() string {
 	return string(b)
 }
 
+func (s *Session) SetWs(ws *websocket.Conn) {
+	s.ws = ws
+}
+
+func (s *Session) GetWs() (*websocket.Conn, error) {
+	if s.ws == nil {
+		return nil, errors.New("not connected")
+	}
+	return s.ws, nil
+}
+
 func NewTokenString() string {
 	return core.NewSha1Object(uuid.NewString()).Sha1()
 }
 
 func init() {
 	core.SHUTDOWN_HOOKS = append(core.SHUTDOWN_HOOKS, func() {
+
+		for _, item := range sessionManager.store.Items() {
+			ws := item.(map[string]any)["s"].(*Session).ws
+			if ws != nil {
+				ws.WriteMessage(websocket.CloseMessage,
+					websocket.FormatCloseMessage(websocket.CloseGoingAway, "server shutdown"))
+				fmt.Printf("[INFO] close websocket connection\n")
+			}
+		}
+
 		v, err := sessionManager.store.MarshalJSON()
 		if err != nil {
 			panic(err)

@@ -42,11 +42,22 @@
             outline: none;
         }
         form input[type="submit"] {
-            padding: 8px 15px;
+            padding: 6px 16px;
             width: initial;
             float: right;
-            margin: 1px -12px 0 0;
-            background-color: #ddf4ff;
+            margin: 5px -12px 0 0;
+            background-color: #4b6692;
+            border-radius: 3px;
+            box-shadow: 0 1px 4px 0 rgb(0 0 0 / 26%);
+            color: #fff;
+            font-size: 13px;
+            line-height: 20px;
+            white-space: nowrap;
+            text-decoration: none;
+            border: 0;
+            font-weight: 400;
+            touch-action: manipulation;
+            cursor: pointer;
         }
         form textarea {
             max-width: 100%;
@@ -57,7 +68,7 @@
             padding: 5px;
         }
         code {font-size: 16px;}
-        footer {font-size: 14px;margin: 10px 0 0 0;color: #000;}
+        footer {font-size: 14px;margin: 10px 0 0 0;color: #000;text-align: center;}
         footer a {padding: 0;}
         ul,li {padding: 0;margin: 0;list-style: none;;}
         blockquote {margin: 0;}
@@ -87,8 +98,16 @@
         .empty {
             text-align: center;font-size: 18px;color: var(--muted-text);
             padding: 50px 0;
-            border: 3px dashed var(--muted-text);
+            border: 3px dashed var(--border);
             margin: 0 12px;
+        }
+        .wsStatusSpan {
+            float: left;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--border);
+            margin: 8px 3px;
         }
         @media screen and (min-width: 1080px) {
             body {
@@ -107,7 +126,7 @@
             nav .logo a {font-size: 26px;}
             .main {width: 745px;margin:10px 10px 0 0;}
             .sidebar {display: block;width: 315px;}
-            footer {color: var(--muted-dark-10);font-size: 16px;}
+            footer {font-size: 16px;}
             .luxun {margin-top: 20px;line-height: 26px;}
             .padding20 {padding: 20px;}
             .main-avatar {
@@ -150,6 +169,7 @@
                 {% autoescape off %}
                 {{site.Footer}}
                 {% endautoescape %}
+                <div class="wsStatusSpan" title="WebSocket not connected yet"></div>
             </div>
         </footer>
     </div>
@@ -168,4 +188,43 @@
 </div>
 </body>
 {% block footer %}{% endblock %}
+<script>
+    let protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+    function connectWs() {
+        const socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+
+        // Connection opened
+        socket.addEventListener('open', function (event) {
+            wsStatus(true)
+        })
+
+        // Connection on error
+        socket.addEventListener('error', function (event) {
+            wsStatus(false, event.reason)
+            console.log(event)
+        })
+
+        socket.addEventListener('close', function (event) {
+            wsStatus(false, event.reason)
+            console.log('close', event)
+            if(event.code === 1001 || event.code === 1006) {
+                setTimeout(connectWs, 2000)
+            }
+        })
+
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            console.log('Message from server ', event.data);
+        })
+    }
+
+    function wsStatus(status, reason) {
+        let wsStatusSpan = document.querySelector(".wsStatusSpan")
+        wsStatusSpan.style.background = status ? 'var(--success)' : 'var(--danger)'
+        wsStatusSpan.title = reason ? reason : status ? 
+            'WebSocket connected successfully' : 'WebSocket not connected yet'
+    }
+
+    connectWs()
+</script>
 </html>

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/websocket"
 	"github.com/kataras/iris/v12"
 	"github.com/muesli/cache2go"
 	"github.com/tasselsd/gorum/assets"
@@ -62,6 +63,27 @@ func StartEngine() {
 	for p, r := range DELETE {
 		app.Delete(p, r)
 	}
+
+	upgrader := websocket.Upgrader{}
+	app.Get("/ws", func(ctx iris.Context) {
+		ws, err := upgrader.Upgrade(ctx.ResponseWriter(), ctx.Request(), nil)
+		if err != nil {
+			write_e500_page(err, ctx)
+			return
+		}
+		s := _sessionFromToken(ctx)
+		if s == nil {
+			ws.WriteMessage(websocket.CloseMessage,
+				websocket.FormatCloseMessage(websocket.ClosePolicyViolation, "unauthenticated"))
+			ws.Close()
+			return
+		}
+		ctx.Values().Get("session").(*session.Session).SetWs(ws)
+		err = ws.WriteMessage(websocket.TextMessage, []byte(`{"event": "connected"}`))
+		if err != nil {
+			write_e500_page(err, ctx)
+		}
+	})
 	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
 }
 

@@ -127,6 +127,7 @@ func postComment(ctx iris.Context) {
 		InitiatorUid: s.ID,
 		Initiator:    s.Name,
 		DiscussDid:   discuss.ID,
+		Discuss:      discuss.Name,
 		CreateTime:   time.Now(),
 		Sha1:         sha1.Sha1(),
 		ShortSha1:    sha1.ShortSha1(),
