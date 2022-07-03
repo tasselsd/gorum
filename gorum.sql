@@ -30,6 +30,7 @@ CREATE TABLE `t_comment` (
   `create_time` datetime DEFAULT NULL,
   `likes` bigint(20) DEFAULT NULL,
   `discuss_did` varchar(45) DEFAULT NULL,
+  `discuss` varchar(512) DEFAULT NULL,
   `sha1` char(40) DEFAULT NULL,
   `sha1_prefix` char(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
