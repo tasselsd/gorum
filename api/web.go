@@ -4,16 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
-	"github.com/gorilla/websocket"
 	"github.com/kataras/iris/v12"
-	"github.com/muesli/cache2go"
 	"github.com/tasselsd/gorum/assets"
 	"github.com/tasselsd/gorum/pkg/core"
-	"github.com/tasselsd/gorum/pkg/session"
 	"github.com/tasselsd/gorum/templates"
-	"github.com/tomasen/realip"
 )
 
 var (
@@ -30,15 +25,21 @@ var (
 
 func StartEngine() {
 	app = iris.Default()
+	app.Logger().SetLevel(core.CFG.String("log.level"))
 	app.Use(applyNavStack)
 	app.Use(applySiteProperties)
 	app.Use(applyAuthentication)
 	app.Use(applyIpRateLimiter)
-	app.WrapRouter(registerAssets)
+	app.WrapRouter(embedAssets)
 	app.Get("/generate_204", generate_204)
 	app.OnErrorCode(iris.StatusNotFound, response_404)
-	app.Logger().SetLevel(core.CFG.String("log.level"))
 	app.RegisterView(iris.Django(http.FS(templates.FS), ".html"))
+	prepareRouters()
+	prepareWs()
+	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
+}
+
+func prepareRouters() {
 	for p, r := range G {
 		app.Get(p, authenticationRequired, r)
 	}
@@ -63,109 +64,12 @@ func StartEngine() {
 	for p, r := range DELETE {
 		app.Delete(p, r)
 	}
-
-	upgrader := websocket.Upgrader{}
-	app.Get("/ws", func(ctx iris.Context) {
-		ws, err := upgrader.Upgrade(ctx.ResponseWriter(), ctx.Request(), nil)
-		if err != nil {
-			write_e500_page(err, ctx)
-			return
-		}
-		s := _sessionFromToken(ctx)
-		if s == nil {
-			ws.WriteMessage(websocket.CloseMessage,
-				websocket.FormatCloseMessage(websocket.ClosePolicyViolation, "unauthenticated"))
-			ws.Close()
-			return
-		}
-		ctx.Values().Get("session").(*session.Session).SetWs(ws)
-		err = ws.WriteMessage(websocket.TextMessage, []byte(`{"event": "connected"}`))
-		if err != nil {
-			write_e500_page(err, ctx)
-		}
-	})
-	app.Listen(fmt.Sprintf(":%d", core.CFG.Int("server.port")))
 }
 
-func generate_204(ctx iris.Context) {
-	ctx.StatusCode(204)
-}
-
-func response_404(ctx iris.Context) {
-	ctx.ViewData("statusCode", iris.StatusNotFound)
-	ctx.ViewData("detail", "Not Found")
-	ctx.View("failed")
-}
-
-func applyNavStack(ctx iris.Context) {
-	stack := core.NewNavStack()
-	ctx.Values().Set("nav", stack)
-	ctx.ViewData("nav", stack)
-	ctx.Next()
-}
-
-func applySiteProperties(ctx iris.Context) {
-	ctx.ViewData("site", core.CFG.Site)
-	ctx.Next()
-}
-
-func authenticationRequired(ctx iris.Context) {
-	s := _sessionFromToken(ctx)
-	if s == nil {
-		ctx.Redirect(fmt.Sprintf("/signin?l=%s", ctx.Request().RequestURI), iris.StatusSeeOther)
-		return
-	}
-	if s != nil && len(s.Avatar) == 0 {
-		s.Avatar = core.CFG.Site.DefaultAvatar
-	}
-	ctx.Values().Set("session", s)
-	ctx.Next()
-}
-func _sessionFromToken(ctx iris.Context) *session.Session {
-	token := ctx.GetCookie("token")
-	var s = session.NaS
-	if len(token) > 0 {
-		ss, _ := session.SessionFromToken(token)
-		s = ss
-	}
-	return s
-}
-
-func applyAuthentication(ctx iris.Context) {
-	s := _sessionFromToken(ctx)
-	if s != nil && len(s.Avatar) == 0 {
-		s.Avatar = core.CFG.Site.DefaultAvatar
-	}
-	ctx.Values().Set("session", s)
-	ctx.ViewData("session", s)
-	ctx.Next()
-}
-
-func registerAssets(w http.ResponseWriter, r *http.Request, router http.HandlerFunc) {
+func embedAssets(w http.ResponseWriter, r *http.Request, router http.HandlerFunc) {
 	if strings.HasPrefix(r.URL.Path, "/assets") {
 		http.FileServer(http.FS(assets.FS)).ServeHTTP(w, r)
 		return
 	}
 	router.ServeHTTP(w, r)
-}
-
-var ipRate = cache2go.Cache("ipRateLimiter")
-
-func applyIpRateLimiter(ctx iris.Context) {
-
-	banTime := time.Minute * 10
-
-	ip := realip.FromRequest(ctx.Request())
-	ipRate.NotFoundAdd(ip, banTime, nil)
-
-	item, _ := ipRate.Value(ip)
-	if item.AccessCount() > 60*10*5 {
-		since := time.Since(item.CreatedOn())
-		if since < banTime {
-			write_ban_page(banTime-since, ctx)
-			return
-		}
-		ipRate.Delete(ip)
-	}
-	ctx.Next()
 }

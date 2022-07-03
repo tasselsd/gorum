@@ -59,10 +59,10 @@ func LoadConfig(args []string) {
 	viper.SetDefault("site.name", "未命名站点")
 	viper.SetDefault("site.brand", viper.GetString("site.name"))
 	viper.SetDefault("notification", make(map[string]string))
-	viper.SetConfigType("yaml") // REQUIRED if the config file does not have the extension in the name
+	viper.SetConfigType("yaml")
 	viper.SetConfigFile(configPath)
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
+	err := viper.ReadInConfig()
+	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 	c := cfg{}
